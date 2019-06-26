@@ -14,7 +14,7 @@ public class Player {
     public Player(String nickname, Boolean registeredPlayer) {
         if(registeredPlayer)
         {
-            DatabaseConnection conn = new DatabaseConnection("xxxULTIMATE_DATABASExxx");
+            DatabaseConnection conn = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
             if(conn.isReady()) System.out.println("Datenbankverbindung erfolgreich!");
             else System.out.println("Datenbankverbindung fehlgeschlagen!");
         }

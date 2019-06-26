@@ -1,7 +1,12 @@
 
 var pathSplit = window.location.pathname.split("/");
 var gameID = pathSplit[pathSplit.length-1];
-var socket = new WebSocket("ws://" + window.location.host + "/play/ttt/" + gameID);
+
+var socket;
+
+if(window.location.port === "8080") socket = new WebSocket("ws://" + window.location.host + "/play/ttt/" + gameID);
+else socket = new WebSocket("ws://" + window.location.host.split(":")[0] + ":8080/play/ttt/" + gameID);
+
 
 socket.onopen = function ()
 {

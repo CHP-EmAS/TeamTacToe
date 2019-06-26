@@ -5,17 +5,18 @@ import java.sql.*;
 public class DatabaseConnection
 {
     private Connection conn = null;
-    private Boolean connectionReady = false;
+    private Boolean connectionReady;
 
-    public DatabaseConnection(String databaseName)
+    public DatabaseConnection(String databaseName,String user, String passwd)
     {
-        if(openConnection(databaseName)) connectionReady = true;
+        if(openConnection(databaseName,user, passwd)) connectionReady = true;
+        else connectionReady = false;
     }
 
-    private Boolean openConnection(String databaseName) {
+    private Boolean openConnection(String databaseName,String user, String passwd) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            conn = DriverManager.getConnection("http://h2839726.stratoserver.net:3306/"+databaseName, "admin", "test");
+            conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/"+databaseName, user, passwd);
             return true;
         } catch (SQLException se) {
             //Handle errors for JDBC
