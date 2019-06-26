@@ -15,7 +15,7 @@ public class DatabaseConnection
     private Boolean openConnection(String databaseName) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            conn = DriverManager.getConnection("localhost:3307/"+databaseName, "test", "test");
+            conn = DriverManager.getConnection("http://h2839726.stratoserver.net:3306/"+databaseName, "admin", "test");
             return true;
         } catch (SQLException se) {
             //Handle errors for JDBC
