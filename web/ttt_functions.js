@@ -52,15 +52,18 @@ function updateFieldData(fieldData){
     {
         if(fieldData[i] === 1)
         {
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'red';
+        	document.getElementById('field' + (i+1)).style.background = "url('http://localhost:8080/TeamTacToe/ttt_circle.png'";
+            //document.getElementById('field' + (i+1)).style.backgroundColor = 'red';
         }
         else if(fieldData[i] === 2)
         {
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'green';
+        	document.getElementById('field' + (i+1)).style.background = "url('http://localhost:8080/TeamTacToe/ttt_cross.png'";
+            //document.getElementById('field' + (i+1)).style.backgroundColor = 'green';
         }
         else
         {
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'white';
+        	document.getElementById('field' + (i+1)).style.background = "none";
+            //document.getElementById('field' + (i+1)).style.backgroundColor = 'white';
         }
 
     }
