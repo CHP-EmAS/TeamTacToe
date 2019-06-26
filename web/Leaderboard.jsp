@@ -21,6 +21,6 @@
 		<h2>TeamTacToe</h2>	
 	</div>
 </div>
-<script type="text/javascript" src="leaderboardtable.js"></script>
+<script type="text/javascript" src="resources/js/leaderboardtable.js"></script>
 </body>
 </html>
