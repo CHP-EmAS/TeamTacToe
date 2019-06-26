@@ -9,7 +9,7 @@
     <meta charset="ISO-8859-1">
     <title>Tic Tac Toe</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-    <script src="resources/js/ttt_functions.js"></script>
+    <script src="/resources/js/ttt_functions.js"></script>
 </head>
 <body>
 <div id="container">
