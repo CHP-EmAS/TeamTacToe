@@ -2,13 +2,27 @@
     pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html>
 <html>
-<style>
-	<%@ include file="/css/leaderboard.css" %>
-</style>
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Leaderboard</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<style>
+		<%@ include file="/css/main.css" %>
+	</style>
+	<style>
+		table {
+			width: 100%;
+			padding: 16px;
+		}
+		tr {
+			height: 40px;
+			width: 80px;
+			padding: 8px;
+		}
+		tr:first-child {
+			font-weight: bold;
+		}
+	</style>
 </head>
 <body>
 <div id="container">
@@ -21,6 +35,6 @@
 		<h2>TeamTacToe</h2>	
 	</div>
 </div>
-<script type="text/javascript" src="resources/js/leaderboardtable.js"></script>
+<script type="text/javascript" src="leaderboardtable.js"></script>
 </body>
 </html>

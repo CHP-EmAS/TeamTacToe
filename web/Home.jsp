@@ -2,13 +2,31 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
-<style>
-	<%@ include file="/css/home.css" %>
-</style>
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<style>
+		<%@ include file="/css/main.css" %>
+	</style>
+	<style>
+		#d2_1 {
+			display: inline-block;
+		}
+		#d2_2 {
+			width: 60%;
+			margin-left: 44px;
+			display: inline-block;
+			vertical-align: top;
+		}
+		button {
+			min-width: 200px;
+			min-height: 60px;
+			padding: 16px;
+			margin-left: 40px;
+			margin-top: 16px;
+		}
+	</style>
 </head>
 <body>
 <div id="container">
