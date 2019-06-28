@@ -45,7 +45,7 @@ public class DatabaseConnection
     {
         if(conn == null)
         {
-            System.out.println("DatabaseConnection: Cant execute Query! ERROR: conn = null.");
+            System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
             return null;
         }
 

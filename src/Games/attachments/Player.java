@@ -1,6 +1,7 @@
 package Games.attachments;
 
 import Interfaces.DatabaseConnection;
+import org.json.JSONObject;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
@@ -14,7 +15,7 @@ public class Player {
     private String nickname;
     private Boolean registeredPlayer;
 
-    public Player(Session playerSession, Boolean registeredPlayer,String nickname, String hash_playerPassword) {
+    public Player(Session playerSession, Boolean registeredPlayer,String nickname, String passwd) {
         this.nickname = nickname;
         socketSession = playerSession;
 
@@ -26,7 +27,7 @@ public class Player {
             DatabaseConnection conn = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
             if(conn.isReady())
             {
-                ResultSet rs = conn.executeQuery("SELECT COUNT(*) AS amount FROM user WHERE nickname='" + nickname + "' AND passwd='" + hash_playerPassword + "';");
+                ResultSet rs = conn.executeQuery("SELECT COUNT(*) AS amount FROM user WHERE nickname='" + nickname + "' AND passwd=PASSWORD('" + passwd + "');");
 
                 try {
                     if (rs.first()) {
@@ -37,9 +38,10 @@ public class Player {
             }
             else System.out.println("Datenbankverbindung fehlgeschlagen!");
         }
+        else this.registeredPlayer = false;
     }
 
-    public Boolean sendMessageToPlayer(String msg) {
+    public Boolean sendMessage(String msg) {
         try {
             socketSession.getBasicRemote().sendText(msg);
             return true;
@@ -49,7 +51,16 @@ public class Player {
         }
     }
 
+    public Boolean sendInfoMessage(String msg) {
+        JSONObject json = new JSONObject();
+        json.put("cmd","infoMsg");
+        json.put("content",msg);
+
+        return sendMessage(json.toString());
+    }
+
     public String getPlayerName(){return nickname;}
     public String getHttpSessionID(){return httpSessionID;}
     public Boolean isRegisteredPlayer(){return registeredPlayer;}
+    public Session getSession(){return socketSession;}
 }

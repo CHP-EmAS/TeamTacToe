@@ -8,16 +8,17 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 
 public class TicTacToe extends Game
 {
-    private int gameID;
+    private String gameID;
     private LittleField fieldData;
 
     private Player playerOne,playerTwo;
     private Player currentPlayer = null;
 
-    public TicTacToe(int gameID) {
+    public TicTacToe(String gameID) {
         this.gameID = gameID;
         fieldData = new LittleField();
 
@@ -28,51 +29,59 @@ public class TicTacToe extends Game
     }
 
     @Override
-    public Boolean addPlayer(final Session playerSession)
+    public Boolean addPlayer(final Session playerSession, String nickname, String passwd)
     {
         String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("sessionID")).getId();
 
-        if(httpSessionID.equals(playerOne.getHttpSessionID()) || httpSessionID.equals(playerTwo.getHttpSessionID())) return true;
+        if(gamestate == Gamestate.RUNNING || isPlayerInGame(httpSessionID)) return false;
+
+        Boolean registeredPlayer = (!passwd.equals(""));
 
         if(playerOne == null){
-            playerOne = new Player(playerSession,true,"EmAS","*47A6B0EA08A36FAEBE4305B373FE37E3CF27C357")
-            playerOne = player;
-            if(playerTwo == null) sendInfoMessage("Warte auf Mitspieler!",playerOne);
+            playerOne = new Player(playerSession,registeredPlayer,nickname,passwd);
+            if(playerTwo == null) playerOne.sendInfoMessage("Warte auf Mitspieler!");
         }
         else if(playerTwo == null)
         {
-            playerTwo = player;
+            playerTwo = new Player(playerSession,registeredPlayer,nickname,passwd);
+            if(playerOne == null) playerTwo.sendInfoMessage("Warte auf Mitspieler!");
         }
         else return false;
 
         if(getPlayerAmount() == 2)
         {
-            if(currentPlayer == null) setCurrentPlayer(player);
-            updateField();
-            gameIsRunning = true;
+            if(currentPlayer == null)
+            {
+                Random generator = new Random();
+                if(generator.nextInt(2) == 1) setCurrentPlayer(playerOne);
+                else setCurrentPlayer(playerTwo);
+            }
+
+            updateUserField();
+            gamestate = Gamestate.RUNNING;
         }
 
         return true;
     }
 
     @Override
-    public Boolean removePlayer(final Session session)
+    public Boolean removePlayer(String httpSessionID)
     {
-        if(playerOne == session)
+        if(playerOne.getHttpSessionID().equals(httpSessionID))
         {
             if(playerOne == currentPlayer) currentPlayer = null;
             playerOne = null;
 
-            if(playerTwo != null)  sendInfoMessage("Mitspieler hat das Spiel verlassen!",playerTwo);
+            if(playerTwo != null)  playerTwo.sendInfoMessage("Mitspieler hat das Spiel verlassen!");
 
             return true;
         }
-        else if(playerTwo == session)
+        else if(playerTwo.getHttpSessionID().equals(httpSessionID))
         {
             if(playerTwo == currentPlayer) currentPlayer = null;
             playerTwo = null;
 
-            if(playerOne != null) sendInfoMessage("Mitspieler hat das Spiel verlassen!",playerOne);
+            if(playerOne != null) playerOne.sendInfoMessage("Mitspieler hat das Spiel verlassen!");
 
             return true;
         }
@@ -92,15 +101,15 @@ public class TicTacToe extends Game
     }
 
     @Override
-    public Boolean isPlayerInGame(final Session session)
+    public Boolean isPlayerInGame(String httpSessionID)
     {
         if(playerOne != null) {
-            if (session.getId().equals(playerOne.getId()))
+            if (httpSessionID.equals(playerOne.getHttpSessionID()))
                 return true;
         }
 
         if(playerTwo != null) {
-            if(session.getId().equals(playerTwo.getId()))
+            if(httpSessionID.equals(playerTwo.getHttpSessionID()))
                 return true;
         }
 
@@ -108,7 +117,14 @@ public class TicTacToe extends Game
     }
 
     @Override
-    public void receiveMessage(String cmd, final Session player) {
+    public void receiveMessage(String cmd, String httpSessionID) {
+        if(!isPlayerInGame(httpSessionID)) return;
+
+        Player sender;
+
+        if(playerOne.getHttpSessionID().equals(httpSessionID)) sender = playerOne;
+        else sender = playerTwo;
+
         JSONObject obj = new JSONObject(cmd);
 
         if(obj.has("cmd"))
@@ -116,15 +132,15 @@ public class TicTacToe extends Game
             switch(obj.getString("cmd"))
             {
                 case "click":
-                    fieldClick(obj.getInt("fieldNum"), player);
+                    fieldClick(obj.getInt("fieldNum"), sender);
                     break;
                 case "reset":
                     if(getPlayerAmount() == 2) {
                         if(currentPlayer != null) setCurrentPlayer(currentPlayer);
                         else setCurrentPlayer(playerOne);
                         fieldData.reset();
-                        updateField();
-                        gameIsRunning = true;
+                        updateUserField();
+                        gamestate = Gamestate.RUNNING;
                     }
                     break;
             }
@@ -137,20 +153,20 @@ public class TicTacToe extends Game
         try {
             if(playerOne != null)
             {
-                sendMsg("Spiel wird beendet!",playerOne);
-                playerOne.close();
+                playerOne.sendInfoMessage("Spiel wird beendet!");
+                playerOne.getSession().close();
                 playerOne = null;
             }
 
             if(playerTwo != null)
             {
-                sendMsg("Spiel wird beendet!",playerTwo);
-                playerTwo.close();
+                playerTwo.sendInfoMessage("Spiel wird beendet!");
+                playerTwo.getSession().close();
                 playerTwo = null;
             }
 
-            gameID = -1;
-            gameIsRunning = false;
+            gameID = "";
+            gamestate = Gamestate.CLOSED;
 
             return true;
         } catch (IOException e) {
@@ -159,57 +175,57 @@ public class TicTacToe extends Game
         }
     }
 
-    private void fieldClick(int fieldNum, final Session player)
+    private void fieldClick(int fieldNum, Player player)
     {
-        if(gameIsRunning)
+        if(gamestate == Gamestate.RUNNING)
         {
             if (playerOne != null && playerTwo != null) {
                 if (fieldNum > 0 && fieldNum < 10) {
                     if (player == currentPlayer) {
                         if (fieldData.getTile(fieldNum).getPlayer() == 0) {
 
-                            if (player == playerOne) fieldData.getTile(fieldNum).setPlayer(1);
-                            else if (player == playerTwo) fieldData.getTile(fieldNum).setPlayer(2);
+                            if (player.equals(playerOne)) fieldData.getTile(fieldNum).setPlayer(1);
+                            else if (player.equals(playerTwo)) fieldData.getTile(fieldNum).setPlayer(2);
 
-                            updateField();
+                            updateUserField();
 
                             int gameResult = fieldData.getResult();
 
                             switch (gameResult) {
                                 case -1:
-                                    sendInfoMessage("Unentschieden!", playerOne);
-                                    sendInfoMessage("Unentschieden!", playerTwo);
-                                    sendMsg("{\"cmd\":\"enableReset\"}",playerOne);
-                                    gameIsRunning = false;
+                                    playerOne.sendInfoMessage("Unentschieden!");
+                                    playerTwo.sendInfoMessage("Unentschieden!");
+                                    playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    gamestate = Gamestate.PAUSED;
                                     return;
                                 case 0:
-                                    if(player == playerOne) setCurrentPlayer(playerTwo);
+                                    if(player.equals(playerOne)) setCurrentPlayer(playerTwo);
                                     else setCurrentPlayer(playerOne);
                                     return;
                                 case 1:
-                                    sendInfoMessage("Du hast gewonnen!", playerOne);
-                                    sendInfoMessage("Du hast verloren!", playerTwo);
-                                    sendMsg("{\"cmd\":\"enableReset\"}",playerOne);
-                                    gameIsRunning = false;
+                                    playerOne.sendInfoMessage("Du hast gewonnen!");
+                                    playerTwo.sendInfoMessage("Du hast verloren!");
+                                    playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    gamestate = Gamestate.PAUSED;
                                     return;
                                 case 2:
-                                    sendInfoMessage("Du hast gewonnen!", playerTwo);
-                                    sendInfoMessage("Du hast verloren!", playerOne);
-                                    sendMsg("{\"cmd\":\"enableReset\"}",playerOne);
-                                    gameIsRunning = false;
+                                    playerTwo.sendInfoMessage("Du hast gewonnen!");
+                                    playerOne.sendInfoMessage("Du hast verloren!");
+                                    playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    gamestate = Gamestate.PAUSED;
                                     return;
                             }
                         } else {
-                            sendInfoMessage("Ungültiger Zug!", player);
+                            player.sendInfoMessage("Ungültiger Zug!");
                         }
                     } else {
-                        sendInfoMessage("Dein Mitspieler ist am Zug!", player);
+                        player.sendInfoMessage("Dein Mitspieler ist am Zug!");
                     }
                 } else {
                     System.out.println("Fehler beim Klicken eines Feldes! Field <" + fieldNum + "> out of range");
                 }
             } else {
-                sendInfoMessage("Ungültiger Zug! Sie brauchen einen Mitspieler!", player);
+                player.sendInfoMessage("Ungültiger Zug! Sie brauchen einen Mitspieler!");
             }
         }
     }
@@ -220,24 +236,24 @@ public class TicTacToe extends Game
      * @param player
      * @return True bei Erfolg. False bei Misserfolg
      */
-    public boolean setCurrentPlayer(Session player) {
+    public boolean setCurrentPlayer(Player player) {
         if(playerOne != null && playerTwo != null) {
             if (player.equals(playerOne)) {
-                this.currentPlayer = this.playerOne;
-                sendInfoMessage("Du bist dran!", playerOne);
-                sendInfoMessage("Mitspieler wählt ein Feld!", playerTwo);
+                currentPlayer = playerOne;
+                playerOne.sendInfoMessage("Du bist dran!");
+                playerTwo.sendInfoMessage("Mitspieler wählt ein Feld!");
                 return true;
             }
 
             if (player.equals(playerTwo)) {
-                this.currentPlayer = this.playerTwo;
-                sendInfoMessage("Du bist dran!", playerTwo);
-                sendInfoMessage("Mitspieler wählt ein Feld!", playerOne);
+                currentPlayer = playerTwo;
+                playerTwo.sendInfoMessage("Du bist dran!");
+                playerOne.sendInfoMessage("Mitspieler wählt ein Feld!");
                 return true;
             }
 
-            System.out.println("ERROR: Ungültige Spielersession! Spieler=" + player.getId() + " Game=" + gameID);
-            sendInfoMessage("ERROR: Ungültige Spielersession!", player);
+            System.out.println("ERROR: Ungültige Spielersession! Spieler=" + player.getHttpSessionID() + " Game=" + gameID);
+            player.sendInfoMessage("ERROR: Ungültige Spielersession!");
         }
         else
             System.out.println("ERROR: Spieler noch nicht initialisiert!");
@@ -245,17 +261,11 @@ public class TicTacToe extends Game
         return false;
     }
 
-    private void sendInfoMessage(String msg, final Session player)
-    {
-        String msg_json = "{\"cmd\":\"msg\",\"content\":\"" + msg + "\"}";
-        sendMsg(msg_json,player);
-    }
-
-    private void updateField()
+    private void updateUserField()
     {
         String msg = "{\"cmd\":\"field\",\"fieldData\":" + Arrays.toString(fieldData.getFieldArray()) + "}";
 
-        if(playerOne != null) sendMsg(msg,playerOne);
-        if(playerTwo != null) sendMsg(msg,playerTwo);
+        if(playerOne != null) playerOne.sendMessage(msg);
+        if(playerTwo != null) playerTwo.sendMessage(msg);
     }
 }

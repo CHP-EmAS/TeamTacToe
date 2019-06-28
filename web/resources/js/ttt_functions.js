@@ -4,13 +4,13 @@ var gameID = pathSplit[pathSplit.length-1];
 
 var socket;
 
-if(window.location.port === "8080") socket = new WebSocket("ws://" + window.location.host + "/play/ttt/" + gameID);
-else socket = new WebSocket("ws://" + window.location.host.split(":")[0] + ":8080/play/ttt/" + gameID);
+if(window.location.port === "8080") socket = new WebSocket("ws://" + window.location.host + "/play?gameID=" + gameID);
+else socket = new WebSocket("ws://" + window.location.host.split(":")[0] + ":8080/play?gameID=" + gameID);
 
 
 socket.onopen = function ()
 {
-
+    socket.send('{"cmd":"connect","gameID":'+gameID+',"nickname":"EmAS","passwd":""}');
 };
 
 socket.onclose = function ()
@@ -49,7 +49,7 @@ socket.onmessage = function (ev)
 };
 
 function fieldClick(fieldNum) {
-    socket.send('{"cmd":"click","fieldNum":'+fieldNum+'}');
+    socket.send('{"forward":"' + gameID + '","cmd":"click","fieldNum":'+fieldNum+'}');
 }
 
 function updateFieldData(fieldData){
@@ -75,7 +75,7 @@ function updateFieldData(fieldData){
 }
 
 function restartGame() {
-    socket.send('{"cmd":"reset"}');
+    socket.send('{""forward":"' + gameID + '",cmd":"reset"}');
     document.getElementById('reset').disabled = true;
 }
 

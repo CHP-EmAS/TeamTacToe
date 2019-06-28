@@ -25,7 +25,7 @@
         switch(type)
         {
             case 'ttt':
-                window.location.href = window.location.protocol + "//" + window.location.host + '/TTT/' + document.getElementById('gameID').value;
+
                 break;
             case 'uttt':
 

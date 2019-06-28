@@ -1,7 +1,7 @@
 package Games;
 
 import javax.websocket.Session;
-import java.io.IOException;
+import Games.attachments.*;
 
 /**
  * Game Klasse - Parent-Objekt zu den jeweiligen Spieltypen
@@ -19,13 +19,34 @@ import java.io.IOException;
  */
 public class Game
 {
+    public enum GameType
+    {
+        TicTacToe("TTT"),
+        Super_TicTacToe("STTT"),
+        Fancy_TicTacToe("FTTT"),
+        Inception_TicTacToe("ITTT"),
+        NONE("NONE");
+
+        private final String shortcut;
+        GameType(String shortcut) { this.shortcut = shortcut; }
+        public String shortcut() { return this.shortcut; }
+    }
+
+    public enum Gamestate
+    {
+        WAITING_FOR_PLAYER,
+        RUNNING,
+        PAUSED,
+        CLOSED
+    }
+
     protected Gamestate gamestate;
     /**
      * addPlayer fügt Sessionobjekte(Spieler) zum Spiel hinzu.
      * @param session Sessionobjekt des Clients.
      * @return Boolen gibt an ob die Operation erfolgreich war.
      */
-    public Boolean addPlayer(final Session session)
+    public Boolean addPlayer(final Session session, String nickname, String passwd)
     {
         return false;
     }
@@ -35,7 +56,7 @@ public class Game
      * @param session Sessionobjekt des Clients.
      * @return Boolen gibt an ob die Operation erfolgreich war.
      */
-    public Boolean removePlayer(final Session session)
+    public Boolean removePlayer(String httpSessionID)
     {
         return false;
     }
@@ -54,7 +75,7 @@ public class Game
      * @param session Sessionobjekt des Clients.
      * @return Boolen gibt an ob sich der Spieler im Spiel befindet.
      */
-    public Boolean isPlayerInGame(final Session session)
+    public Boolean isPlayerInGame(String httpSessionID)
     {
         return false;
     }
@@ -64,7 +85,7 @@ public class Game
      * @param cmd String - ist der Inhalt der Nachricht.
      * @param player Sessionobjekt des Senders.
      */
-    public void receiveMessage(String cmd, final Session player) {}
+    public void receiveMessage(String cmd, String httpSessionID) {}
 
     /**
      * closeGame schließt ein Spielobjekt sicher. Alle Verbindungen werden dabei getrennt.
@@ -74,12 +95,19 @@ public class Game
     {
         return false;
     }
-}
 
-enum Gamestate
-{
-    WAITING_FOR_PLAYER,
-    RUNNING,
-    PAUSED,
-    RESTARTING
+    public static GameType getGameType(String shortcut) {
+        switch (shortcut) {
+            case "TTT":
+                return GameType.TicTacToe;
+            case "STTT":
+                return GameType.Super_TicTacToe;
+            case "FTTT":
+                return GameType.Fancy_TicTacToe;
+            case "ITTT":
+                return GameType.Inception_TicTacToe;
+            default:
+                return GameType.NONE;
+        }
+    }
 }

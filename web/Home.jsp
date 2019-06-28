@@ -9,6 +9,7 @@
 	<meta charset="ISO-8859-1">
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<script src="/resources/js/std_functions.js"></script>
 </head>
 <body>
 <div id="container">
@@ -17,9 +18,9 @@
 	</div>
 	<div id="d2">
 		<div id="d2_1">
-			<button onclick="fieldClick(1)">Normal Tic Tac Toe</button>
+			<button onclick="createGame('TTT')">Normal Tic Tac Toe</button>
 			<br>
-			<button onclick="fieldClick(1)">Ultimate Tic Tac Toe</button>
+			<button onClick="createGame('UTTT')">Ultimate Tic Tac Toe</button>
 			<br>
 			<button onclick="fieldClick(1)">Leaderboard</button>
 			<br>
