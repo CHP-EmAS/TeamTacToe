@@ -5,6 +5,7 @@ import Interfaces.DatabaseConnection;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.sql.*;
 
 public class Player {
     private Session socketSession;
@@ -14,7 +15,9 @@ public class Player {
     private Boolean registeredPlayer;
 
     public Player(Session playerSession, Boolean registeredPlayer,String nickname, String hash_playerPassword) {
+        this.nickname = nickname;
         socketSession = playerSession;
+
         HttpSession temp = (HttpSession) socketSession.getUserProperties().get("sessionID");
         httpSessionID = temp.getId();
 
@@ -23,7 +26,14 @@ public class Player {
             DatabaseConnection conn = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
             if(conn.isReady())
             {
-                conn.executeQuery("SELECT nickname WHERE nickname='" + nickname + "' AND passwd='" + hash_playerPassword + "';");
+                ResultSet rs = conn.executeQuery("SELECT COUNT(*) AS amount FROM user WHERE nickname='" + nickname + "' AND passwd='" + hash_playerPassword + "';");
+
+                try {
+                    if (rs.first()) {
+                        this.registeredPlayer = (rs.getInt("amount") == 1);
+                    }
+                }
+                catch(SQLException e) { e.printStackTrace(); }
             }
             else System.out.println("Datenbankverbindung fehlgeschlagen!");
         }
@@ -38,4 +48,8 @@ public class Player {
             return false;
         }
     }
+
+    public String getPlayerName(){return nickname;}
+    public String getHttpSessionID(){return httpSessionID;}
+    public Boolean isRegisteredPlayer(){return registeredPlayer;}
 }

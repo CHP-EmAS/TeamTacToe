@@ -67,22 +67,6 @@ public class Game
     public void receiveMessage(String cmd, final Session player) {}
 
     /**
-     * sendMsg sended eine Nachricht an eine Clienten
-     * @param msg String - Nachricht
-     * @param player Sessionobjekt des Empfängers.
-     * @return Boolen gibt an ob die Operation erfolgreich war.
-     */
-    protected Boolean sendMsg(String msg, final Session player) {
-        try {
-            player.getBasicRemote().sendText(msg);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
      * closeGame schließt ein Spielobjekt sicher. Alle Verbindungen werden dabei getrennt.
      * @return Boolen gibt an ob die Operation erfolgreich war.
      */

@@ -3,6 +3,8 @@ package Games;
 import Games.attachments.*;
 
 import org.json.*;
+
+import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,11 +12,10 @@ import java.util.Arrays;
 public class TicTacToe extends Game
 {
     private int gameID;
-    private Boolean gameIsRunning;
     private LittleField fieldData;
 
-    private Session playerOne,playerTwo;
-    private Session currentPlayer = null;
+    private Player playerOne,playerTwo;
+    private Player currentPlayer = null;
 
     public TicTacToe(int gameID) {
         this.gameID = gameID;
@@ -23,18 +24,19 @@ public class TicTacToe extends Game
         playerOne = null;
         playerTwo = null;
 
-        gameIsRunning = false;
+        gamestate = Gamestate.WAITING_FOR_PLAYER;
     }
 
     @Override
-    public Boolean addPlayer(final Session player)
+    public Boolean addPlayer(final Session playerSession)
     {
-        if(player.equals(playerOne) || player.equals(playerTwo)) return true;
+        String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("sessionID")).getId();
+
+        if(httpSessionID.equals(playerOne.getHttpSessionID()) || httpSessionID.equals(playerTwo.getHttpSessionID())) return true;
 
         if(playerOne == null){
+            playerOne = new Player(playerSession,true,"EmAS","*47A6B0EA08A36FAEBE4305B373FE37E3CF27C357")
             playerOne = player;
-            Player lol = new Player(player,true,"EmAS","*47A6B0EA08A36FAEBE4305B373FE37E3CF27C357");
-
             if(playerTwo == null) sendInfoMessage("Warte auf Mitspieler!",playerOne);
         }
         else if(playerTwo == null)
