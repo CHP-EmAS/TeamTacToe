@@ -1,7 +1,12 @@
 
 var pathSplit = window.location.pathname.split("/");
 var gameID = pathSplit[pathSplit.length-1];
-var socket = new WebSocket("ws://" + window.location.host + "/play/ttt/" + gameID);
+
+var socket;
+
+if(window.location.port === "8080") socket = new WebSocket("ws://" + window.location.host + "/play/ttt/" + gameID);
+else socket = new WebSocket("ws://" + window.location.host.split(":")[0] + ":8080/play/ttt/" + gameID);
+
 
 socket.onopen = function ()
 {
@@ -52,15 +57,18 @@ function updateFieldData(fieldData){
     {
         if(fieldData[i] === 1)
         {
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'red';
+        	document.getElementById('field' + (i+1)).style.background = "url('/resources/img/ttt_circle.png')";
+            //document.getElementById('field' + (i+1)).style.backgroundColor = 'red';
         }
         else if(fieldData[i] === 2)
         {
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'green';
+        	document.getElementById('field' + (i+1)).style.background = "url('/resources/img/ttt_cross.png')";
+            //document.getElementById('field' + (i+1)).style.backgroundColor = 'green';
         }
         else
         {
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'white';
+        	document.getElementById('field' + (i+1)).style.background = "none";
+            //document.getElementById('field' + (i+1)).style.backgroundColor = 'white';
         }
 
     }
