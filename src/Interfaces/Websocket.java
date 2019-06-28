@@ -21,7 +21,6 @@ public class Websocket {
 
     //Ein übergabe Objekt für fehlerhafte Spielobjekte
     private static Game errorGame;
-    public HttpSessionOverride test;
 
     /////////////////////****PUBLIC****/////////////////////
 

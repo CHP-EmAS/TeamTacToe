@@ -7,15 +7,16 @@ public class DatabaseConnection
     private Connection conn = null;
     private Boolean connectionReady = false;
 
-    public DatabaseConnection(String databaseName)
+    public DatabaseConnection(String databaseName,String user, String passwd)
     {
-        if(openConnection(databaseName)) connectionReady = true;
+        if(openConnection(databaseName,user, passwd)) connectionReady = true;
+        else connectionReady = false;
     }
 
-    private Boolean openConnection(String databaseName) {
+    private Boolean openConnection(String databaseName,String user, String passwd) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
-            conn = DriverManager.getConnection("http://h2839726.stratoserver.net:3306/"+databaseName, "admin", "test");
+            conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/"+databaseName, user, passwd);
             return true;
         } catch (SQLException se) {
             //Handle errors for JDBC
@@ -28,7 +29,7 @@ public class DatabaseConnection
         return false;
     }
 
-    public Boolean closeConnection()
+    private Boolean closeConnection()
     {
         try
         {
@@ -41,6 +42,32 @@ public class DatabaseConnection
         }
 
         return false;
+    }
+
+    public ResultSet executeQuery(String query )
+    {
+
+        if(conn == null)
+        {
+            System.out.println("DatabaseConnection: Cant execute Query! ERROR: conn = null.");
+            return null;
+        }
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+            return stmt.executeQuery(query);
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null)
+            {
+                try{ stmt.close();} catch (SQLException e ) { e.printStackTrace();}
+            }
+        }
+
+        return null;
     }
 
     public Boolean isReady()

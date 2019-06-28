@@ -1,6 +1,8 @@
 package Games.attachments;
 
 import Interfaces.DatabaseConnection;
+
+import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
 
@@ -11,16 +13,23 @@ public class Player {
     private String nickname;
     private Boolean registeredPlayer;
 
-    public Player(String nickname, Boolean registeredPlayer) {
+    public Player(Session playerSession, Boolean registeredPlayer,String nickname, String hash_playerPassword) {
+        socketSession = playerSession;
+        HttpSession temp = (HttpSession) socketSession.getUserProperties().get("sessionID");
+        httpSessionID = temp.getId();
+
         if(registeredPlayer)
         {
-            DatabaseConnection conn = new DatabaseConnection("xxxULTIMATE_DATABASExxx");
-            if(conn.isReady()) System.out.println("Datenbankverbindung erfolgreich!");
+            DatabaseConnection conn = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
+            if(conn.isReady())
+            {
+                conn.executeQuery("SELECT nickname WHERE nickname='" + nickname + "' AND passwd='" + hash_playerPassword + "';");
+            }
             else System.out.println("Datenbankverbindung fehlgeschlagen!");
         }
     }
 
-    public Boolean sendMessage(String msg, Session socketSession) {
+    public Boolean sendMessageToPlayer(String msg) {
         try {
             socketSession.getBasicRemote().sendText(msg);
             return true;

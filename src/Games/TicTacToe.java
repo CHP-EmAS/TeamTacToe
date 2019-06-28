@@ -16,8 +16,6 @@ public class TicTacToe extends Game
     private Session playerOne,playerTwo;
     private Session currentPlayer = null;
 
-    Player lol = new Player("EmAS",true);
-
     public TicTacToe(int gameID) {
         this.gameID = gameID;
         fieldData = new LittleField();
@@ -35,6 +33,7 @@ public class TicTacToe extends Game
 
         if(playerOne == null){
             playerOne = player;
+            Player lol = new Player(player,true,"EmAS","*47A6B0EA08A36FAEBE4305B373FE37E3CF27C357");
 
             if(playerTwo == null) sendInfoMessage("Warte auf Mitspieler!",playerOne);
         }
