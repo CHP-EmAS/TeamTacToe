@@ -5,12 +5,11 @@ import java.sql.*;
 public class DatabaseConnection
 {
     private Connection conn = null;
-    private Boolean connectionReady = false;
+    private Boolean connectionReady;
 
     public DatabaseConnection(String databaseName,String user, String passwd)
     {
-        if(openConnection(databaseName,user, passwd)) connectionReady = true;
-        else connectionReady = false;
+        connectionReady = openConnection(databaseName,user, passwd);
     }
 
     private Boolean openConnection(String databaseName,String user, String passwd) {
@@ -19,10 +18,8 @@ public class DatabaseConnection
             conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/"+databaseName, user, passwd);
             return true;
         } catch (SQLException se) {
-            //Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
-            //Handle errors for Class.forName
             e.printStackTrace();
         }
 
@@ -46,7 +43,6 @@ public class DatabaseConnection
 
     public ResultSet executeQuery(String query )
     {
-
         if(conn == null)
         {
             System.out.println("DatabaseConnection: Cant execute Query! ERROR: conn = null.");
