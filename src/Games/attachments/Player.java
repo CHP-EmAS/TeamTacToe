@@ -19,6 +19,13 @@ public class Player {
         this.nickname = nickname;
         socketSession = playerSession;
 
+        if(playerSession == null)
+        {
+            httpSessionID = "NULL_SESSION";
+            registeredPlayer = false;
+            return;
+        }
+
         HttpSession temp = (HttpSession) socketSession.getUserProperties().get("sessionID");
         httpSessionID = temp.getId();
 

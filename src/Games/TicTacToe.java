@@ -19,6 +19,8 @@ public class TicTacToe extends Game
     private Player currentPlayer = null;
 
     public TicTacToe(String gameID) {
+        super(GameType.TicTacToe);
+
         this.gameID = gameID;
         fieldData = new LittleField();
 
@@ -173,6 +175,14 @@ public class TicTacToe extends Game
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Player getPlayer(String httpSessionID)
+    {
+        if(playerOne.getHttpSessionID().equals(httpSessionID)) return playerOne;
+        else if(playerTwo.getHttpSessionID().equals(httpSessionID)) return playerTwo;
+        else return errorPlayer;
     }
 
     private void fieldClick(int fieldNum, Player player)

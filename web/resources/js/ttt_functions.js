@@ -34,14 +34,14 @@ socket.onmessage = function (ev)
                     console.log(obj.fieldData);
                     updateFieldData(obj.fieldData);
                     break;
-                case 'msg':
+                case 'infoMsg':
                     document.getElementById('msgBox').innerHTML  = obj.content;
                     break;
                 case 'enableReset':
                     document.getElementById('reset').disabled = false;
                     break;
                 default:
-                    console.log('Command "' + obj.command + '" is unknown');
+                    console.log('Command "' + obj.cmd + '" is unknown');
                     break;
             }
         }

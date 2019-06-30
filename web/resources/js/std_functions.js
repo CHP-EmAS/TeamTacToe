@@ -10,6 +10,8 @@ socket.onopen = function ()
 
 socket.onmessage = function(ev)
 {
+    console.log('MSG from Server: ' + ev.data);
+
     if(IsJsonString(ev.data))
     {
         var obj = JSON.parse(ev.data);
