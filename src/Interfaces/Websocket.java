@@ -198,6 +198,8 @@ public class Websocket {
                 newGame  = new TicTacToe(newGameID);
                 break;
             case Super_TicTacToe:
+                newGame  = new SuperTicTacToe(newGameID);
+                break;
             case Fancy_TicTacToe:
             case Inception_TicTacToe:
             default:

@@ -20,8 +20,6 @@ import java.util.HashMap;
  */
 public class Game
 {
-    protected final static Player errorPlayer = new Player(null,false,"","");
-
     public enum GameType {
         TicTacToe("TTT"),
         Super_TicTacToe("STTT"),
@@ -42,10 +40,13 @@ public class Game
         CREATED
     }
 
+    protected String gameID;
+    protected final static Player errorPlayer = new Player(null,false,"","");
     protected Gamestate gamestate;
     protected final GameType gametype;
 
     public Game(GameType type) {
+        gameID = "";
         gametype = type;
         gamestate = Gamestate.CREATED;
     }

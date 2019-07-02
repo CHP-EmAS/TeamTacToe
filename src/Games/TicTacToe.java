@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class TicTacToe extends Game
 {
-    private String gameID;
     private LittleField fieldData;
 
     private Player playerOne,playerTwo;
@@ -21,7 +20,7 @@ public class TicTacToe extends Game
     public TicTacToe(String gameID) {
         super(GameType.TicTacToe);
 
-        this.gameID = gameID;
+        super.gameID = gameID;
         fieldData = new LittleField();
 
         playerOne = null;
@@ -246,29 +245,26 @@ public class TicTacToe extends Game
      * @param player
      * @return True bei Erfolg. False bei Misserfolg
      */
-    public boolean setCurrentPlayer(Player player) {
+    private void setCurrentPlayer(Player player) {
         if(playerOne != null && playerTwo != null) {
             if (player.equals(playerOne)) {
                 currentPlayer = playerOne;
                 playerOne.sendInfoMessage("Du bist dran!");
                 playerTwo.sendInfoMessage("Mitspieler wählt ein Feld!");
-                return true;
+                return;
             }
 
             if (player.equals(playerTwo)) {
                 currentPlayer = playerTwo;
                 playerTwo.sendInfoMessage("Du bist dran!");
                 playerOne.sendInfoMessage("Mitspieler wählt ein Feld!");
-                return true;
+                return;
             }
 
             System.out.println("ERROR: Ungültige Spielersession! Spieler=" + player.getHttpSessionID() + " Game=" + gameID);
             player.sendInfoMessage("ERROR: Ungültige Spielersession!");
         }
-        else
-            System.out.println("ERROR: Spieler noch nicht initialisiert!");
-
-        return false;
+        else System.out.println("ERROR: Spieler noch nicht initialisiert!");
     }
 
     private void updateUserField()
