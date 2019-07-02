@@ -37,8 +37,8 @@ body {
 	text-align: center;
 }
 .fieldButton {
-	min-width: 100px;
-	min-height: 100px;
+	min-width: 50px;
+	min-height: 50px;
 	padding: 40px;
 	margin-left: 3px;
 	margin-top: 1px;

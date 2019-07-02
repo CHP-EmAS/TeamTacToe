@@ -20,7 +20,7 @@
 		<div id="d2_1">
 			<button onclick="createGame('TTT')">Normal Tic Tac Toe</button>
 			<br>
-			<button onClick="createGame('UTTT')">Ultimate Tic Tac Toe</button>
+			<button onClick="createGame('STTT')">Super Tic Tac Toe</button>
 			<br>
 			<button onclick="fieldClick(1)">Leaderboard</button>
 			<br>

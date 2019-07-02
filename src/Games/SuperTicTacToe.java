@@ -231,10 +231,14 @@ public class SuperTicTacToe extends Game{
 
 	private void updateUserField()
 	{
-		String msg = "{\"cmd\":\"field\",\"fieldData\":" + Arrays.toString(getCompleteFieldArray()) + "}";
+		JSONObject json = new JSONObject();
 
-		if(playerOne != null) playerOne.sendMessage(msg);
-		if(playerTwo != null) playerTwo.sendMessage(msg);
+		json.put("cmd", "field");
+		json.put("fieldData", getCompleteFieldArray());
+		json.put("currentfield", getCurrentField());
+
+		if(playerOne != null) playerOne.sendMessage(json.toString());
+		if(playerTwo != null) playerTwo.sendMessage(json.toString());
 	}
 
     //Ab hier Funktionen explizit für SuperTicTacToe
@@ -253,10 +257,10 @@ public class SuperTicTacToe extends Game{
 			if (playerOne != null && playerTwo != null) {
 				if (fieldNum > 0 && fieldNum < 82) {
 					if (player == currentPlayer) {
-						if (fields[fieldNum/9]==currentField && currentField.getTile((fieldNum-1)%9+1).getPlayer()==0) {
+						if (fields[(fieldNum-1)/9]==currentField && currentField.getTile((fieldNum-1)%9+1).getPlayer()==0) {
 
 							//ändert currentField gleich mit
-							setTile((fieldNum-1)%9);
+							setTile((fieldNum-1)%9+1);
 
 							updateUserField();
 
