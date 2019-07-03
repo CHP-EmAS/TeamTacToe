@@ -331,7 +331,7 @@ public class SuperTicTacToe extends Game{
 
 	private int getCompleteResult() {
 		//Durch Spalten durchgehen
-		for(int i=0; i<3; i++) {
+		for(int i=1; i<4; i++) {
 			if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+3) == 1)&&(getLittleFieldResult(i+6) == 1)) {
 				return 1;
 			}else {
@@ -341,7 +341,7 @@ public class SuperTicTacToe extends Game{
 			}
 		}
 		//Durch Reihen durchgehen
-		for(int i=0; i<7; i+=3) {
+		for(int i=1; i<8; i+=3) {
 			if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+1) == 1)&&(getLittleFieldResult(i+2) == 1)) {
 				return 1;
 			}else {
@@ -351,17 +351,17 @@ public class SuperTicTacToe extends Game{
 			}
 		}
 		//Diagonale oben links nach unten rechts prüfen
-		if((getLittleFieldResult(0) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(8) == 1)) {
+		if((getLittleFieldResult(1) == 1)&&(getLittleFieldResult(5) == 1)&&(getLittleFieldResult(9) == 1)) {
 			return 1;
 		}
-		if((getLittleFieldResult(0) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(8) == 2)) {
+		if((getLittleFieldResult(1) == 2)&&(getLittleFieldResult(5) == 2)&&(getLittleFieldResult(9) == 2)) {
 			return 2;
 		}
 		//Diagonale oben rechts nach unten links prüfen
-		if((getLittleFieldResult(2) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(6) == 1)) {
+		if((getLittleFieldResult(3) == 1)&&(getLittleFieldResult(5) == 1)&&(getLittleFieldResult(7) == 1)) {
 			return 1;
 		}
-		if((getLittleFieldResult(2) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(6) == 2)) {
+		if((getLittleFieldResult(3) == 2)&&(getLittleFieldResult(5) == 2)&&(getLittleFieldResult(7) == 2)) {
 			return 2;
 		}
 		return 0;
