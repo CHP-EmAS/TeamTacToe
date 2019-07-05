@@ -3,7 +3,7 @@ var socket;
 if(window.location.port === "8080") socket = new WebSocket("ws://" + window.location.host + "/play");
 else socket = new WebSocket("ws://" + window.location.host.split(":")[0] + ":8080/play");
 
-socket.onopen = function ()
+socket.onopen = function()
 {
 
 };
@@ -34,11 +34,6 @@ socket.onmessage = function(ev)
 function createGame(gametype)
 {
     socket.send('{"cmd":"createNewGame","type":"'+gametype+'"}');
-}
-
-function login(nickname, password)
-{
-    socket.send('{"cmd":"login","nickname":'+nickname+',"password":'+password+'}');
 }
 
 function IsJsonString(str) {

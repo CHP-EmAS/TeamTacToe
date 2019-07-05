@@ -15,37 +15,18 @@ public class Player {
     private String nickname;
     private Boolean registeredPlayer;
 
-    public Player(Session playerSession, Boolean registeredPlayer,String nickname, String passwd) {
-        this.nickname = nickname;
+    public Player(Session playerSession) {
         socketSession = playerSession;
 
         if(playerSession == null)
         {
             httpSessionID = "NULL_SESSION";
-            registeredPlayer = false;
             return;
         }
 
         HttpSession temp = (HttpSession) socketSession.getUserProperties().get("sessionID");
+
         httpSessionID = temp.getId();
-
-        if(registeredPlayer)
-        {
-            DatabaseConnection conn = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
-            if(conn.isReady())
-            {
-                ResultSet rs = conn.executeQuery("SELECT COUNT(*) AS amount FROM user WHERE nickname='" + nickname + "' AND passwd=PASSWORD('" + passwd + "');");
-
-                try {
-                    if (rs.first()) {
-                        this.registeredPlayer = (rs.getInt("amount") == 1);
-                    }
-                }
-                catch(SQLException e) { e.printStackTrace(); }
-            }
-            else System.out.println("Datenbankverbindung fehlgeschlagen!");
-        }
-        else this.registeredPlayer = false;
     }
 
     public Boolean sendMessage(String msg) {

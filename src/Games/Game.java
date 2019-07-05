@@ -41,7 +41,7 @@ public class Game
     }
 
     protected String gameID;
-    protected final static Player errorPlayer = new Player(null,false,"","");
+    protected final static Player errorPlayer = new Player(null);
     protected Gamestate gamestate;
     protected final GameType gametype;
 
@@ -56,7 +56,7 @@ public class Game
      * @param session Sessionobjekt des Clients.
      * @return Boolen gibt an ob die Operation erfolgreich war.
      */
-    public Boolean addPlayer(final Session session, String nickname, String passwd)
+    public Boolean addPlayer(final Session session)
     {
         return false;
     }

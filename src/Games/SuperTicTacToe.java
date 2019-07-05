@@ -39,21 +39,19 @@ public class SuperTicTacToe extends Game{
 	}
 
 	@Override
-	public Boolean addPlayer(final Session playerSession, String nickname, String passwd)
+	public Boolean addPlayer(final Session playerSession)
 	{
 		String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("sessionID")).getId();
 
 		if(gamestate != Gamestate.WAITING_FOR_PLAYER || isPlayerInGame(httpSessionID)) return false;
 
-		Boolean registeredPlayer = (!passwd.equals(""));
-
 		if(playerOne == null){
-			playerOne = new Player(playerSession,registeredPlayer,nickname,passwd);
+			playerOne = new Player(playerSession);
 			if(playerTwo == null) playerOne.sendInfoMessage("Warte auf Mitspieler!");
 		}
 		else if(playerTwo == null)
 		{
-			playerTwo = new Player(playerSession,registeredPlayer,nickname,passwd);
+			playerTwo = new Player(playerSession);
 			if(playerOne == null) playerTwo.sendInfoMessage("Warte auf Mitspieler!");
 		}
 		else return false;

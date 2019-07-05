@@ -96,7 +96,7 @@ public class Websocket {
                         if(obj.has("gameID") && obj.has("nickname") && obj.has("passwd")) {
                             if(gameSessions.containsKey(obj.getString("gameID"))) {
                                 if(!getGameByID(obj.getString("gameID")).isPlayerInGame(httpSessionID)) {
-                                    if(!getGameByID(obj.getString("gameID")).addPlayer(session,obj.getString("nickname"),obj.getString("passwd")))
+                                    if(!getGameByID(obj.getString("gameID")).addPlayer(session))
                                         closeClient(session, "Unable to add to Game <" + obj.getString("gameID") + ">");
                                 }
                                 else closeClient(session, "Unable to add to Game <" + obj.getString("gameID") + "> Instance of Session <" + httpSessionID + "> alredy exists in Game <" + obj.getString("gameID") + ">!");
@@ -169,7 +169,7 @@ public class Websocket {
         closeClient(session);
     }
 
-    static private String createGame(Game.GameType gameType) {
+    static public String createGame(Game.GameType gameType) {
         if(gameSessions.size() >= MAX_GAME_AMOUNT) return "";
 
         String newGameID;
