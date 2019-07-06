@@ -4,15 +4,15 @@ import java.sql.*;
 
 public class DatabaseConnection
 {
-    private static Connection conn = null;
-    private static Boolean connectionReady;
+    private Connection conn = null;
+    private Boolean connectionReady;
 
     public DatabaseConnection(String databaseName,String user, String passwd)
     {
         connectionReady = openConnection(databaseName,user, passwd);
     }
 
-    private static Boolean openConnection(String databaseName,String user, String passwd) {
+    private Boolean openConnection(String databaseName,String user, String passwd) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/"+databaseName, user, passwd);
@@ -26,7 +26,7 @@ public class DatabaseConnection
         return false;
     }
 
-    private static Boolean closeConnection()
+    public Boolean closeConnection()
     {
         try
         {
@@ -41,7 +41,7 @@ public class DatabaseConnection
         return false;
     }
 
-    public static ResultSet executeQuery(String query )
+    public ResultSet executeQuery(String query )
     {
         if(conn == null)
         {
@@ -66,7 +66,7 @@ public class DatabaseConnection
         return null;
     }
 
-    public static Boolean isReady()
+    public Boolean isReady()
     {
         return connectionReady;
     }

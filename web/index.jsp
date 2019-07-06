@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:useBean id="user" class="Beans.UserBean" scope="session"/>
 
 <!DOCTYPE html>
 <html>
@@ -9,11 +11,26 @@
 	<meta charset="ISO-8859-1">
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<script>
+		function createGame(gametype)
+		{
+			var req = new XMLHttpRequest();
+			req.open('GET','/createGame?gameType='+gametype, true);
+
+			req.onreadystatechange = function receive() {
+				if(req.readyState === 4){
+					window.location = req.responseText;
+				}
+			};
+
+			req.send();
+		}
+	</script>
 </head>
 <body>
 <div id="container">
 	<div id="d1">
-		<h1>Tic Tac Toe</h1>
+		<h1>Tic Tac Toe <jsp:getProperty property="nickname" name="user"/></h1>
 	</div>
 	<div id="d2">
 		<div id="d2_1">

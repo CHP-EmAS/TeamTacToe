@@ -65,33 +65,8 @@ public class Websocket {
 
             if(obj.has("cmd"))
             {
-                switch (obj.getString("cmd")) {
-                    case "createNewGame":
-                        if(obj.has("type")){
-                            String gameType = obj.getString("type");
-                            Game.GameType type = Game.getGameType(gameType);
-
-                            if (type != Game.GameType.NONE){
-                                String newGameID = createGame(type);
-
-                                if(!newGameID.equals("")){
-                                    JSONObject json = new JSONObject();
-
-                                    json.put("cmd", "game_created");
-                                    json.put("gameType", type.shortcut());
-                                    json.put("gameID", newGameID);
-
-                                    sendMsg(json.toString(), session);
-                                }
-                                else closeClient(session,"Cannot create Game!");
-                            }
-                        }
-                        else closeClient(session,"Missing Variables in Command <createNewGame>");
-
-                        break;
-                    case "login":
-
-                        break;
+                switch (obj.getString("cmd"))
+                {
                     case "connect":
                         if(obj.has("gameID") && obj.has("nickname") && obj.has("passwd")) {
                             if(gameSessions.containsKey(obj.getString("gameID"))) {
@@ -105,6 +80,9 @@ public class Websocket {
                         }
                         else closeClient(session,"Missing Variables in Command <connect>");
 
+                        break;
+                    default:
+                        System.out.println("Websocket: Unknown Socket Command <" + obj.getString("cmd") +  ">!");
                         break;
                 }
             }

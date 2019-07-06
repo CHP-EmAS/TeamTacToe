@@ -10,36 +10,37 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.Map;
 
-import Beans.LoginRegisterBean;
+import Beans.UserBean;
 
-@WebServlet("/login")
+@WebServlet("/Validate")
 public class loginController extends HttpServlet
 {
     private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LoginRegisterBean LRBean = new LoginRegisterBean();
-        request.setAttribute("loginBean", LRBean);
+        UserBean userBean = new UserBean();
+        request.setAttribute("userBean", userBean);
 
         Map<String,String[]> paraMap = request.getParameterMap();
 
-        if (paraMap.containsKey("nickname") && paraMap.containsKey("passwd") && paraMap.containsKey("method"))
+        if (paraMap.containsKey("nickname") && paraMap.containsKey("passwd"))
         {
             String nickname = request.getParameter("nickname");
             String passwd = request.getParameter("passwd");
-            String method = request.getParameter("method");
 
-            LRBean.setMethod(method);
-            LRBean.setNickname(nickname);
-            LRBean.setPassword(passwd);
+            userBean.setNickname(nickname);
+            userBean.setPassword(passwd);
 
-            if(LRBean.getSuccess()) request.getSession().setAttribute("nickname", nickname);
+            userBean.validateLogin();
 
-            request.setAttribute("alert",LRBean.getAlert());
-            request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+            if(userBean.isValid())
+            {
+                request.getSession(true).setAttribute("user", userBean);
+                response.sendRedirect("index.jsp");
+            }
+            else request.getServletContext().getRequestDispatcher("/Login").forward(request, response);
         }
         else
         {
-            request.setAttribute("alert","Upps :( , da ist etwas schief gelaufen!");
-            request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+            response.sendRedirect("Login");
         }
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

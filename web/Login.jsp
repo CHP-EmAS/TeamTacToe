@@ -5,27 +5,28 @@
   Time: 12:18
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:useBean id="userBean" class="Beans.UserBean" scope="request"/>
 <html>
 <head>
     <title>Tic Tac Toe Login</title>
 </head>
 <body>
-<jsp:useBean id="loginBean" class="Beans.LoginRegisterBean" scope="request"/>
-
-<p><jsp:getProperty property="alert" name="loginBean"/></p>
-<div class="form-popup" id="loginForm">
-    <form action="login" class="form-container" method="post">
+    <form action="Validate" class="form-container" method="post">
         <h1>Login</h1>
 
+        <p><jsp:getProperty property="alert" name="userBean"/></p>
+
         <label for="nickname"><b>Benutzername</b></label>
-        <input id="nickname" type="text" value="<jsp:getProperty property="nickname" name="loginBean"/>" name="nickname" required>
+        <input id="nickname" type="text" value="<jsp:getProperty property="nickname" name="userBean"/>" name="nickname" required>
 
         <label for="passwd"><b>Passwort</b></label>
         <input id="passwd" type="password" name="passwd" required>
 
         <button type="submit" class="btn">Login</button>
     </form>
-</div>
+<h1> </h1>
+
 </body>
 </html>

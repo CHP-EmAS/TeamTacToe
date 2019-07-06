@@ -1,5 +1,8 @@
 package Servlets;
 
+import Games.Game;
+import Interfaces.Websocket;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -8,33 +11,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Beans.CreateGameBean;
-
 @WebServlet("/createGame")
 public class CreateGameController extends HttpServlet
 {
-    private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CreateGameBean newGameBean = new CreateGameBean();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getParameterMap().containsKey("gameType"))
+        {
+            Game.GameType type = Game.getGameType(request.getParameter("gameType"));
+            String generatedGameID = Websocket.createGame(type);
 
-        if (request.getParameterMap().containsKey("gameType")) {
-            String gameType = request.getParameter("gameType");
-            newGameBean.setType(gameType);
-
-            if (newGameBean.getSuccess()) {
-                String newGameID = newGameBean.getGameID();
-                response.sendRedirect("/" + gameType + "/" + newGameID);
+            if(!generatedGameID.equals(""))
+            {
+                response.getWriter().write("/" + type.shortcut() + "/" + generatedGameID);
+            }
+            else
+            {
+                response.getWriter().write("/");
             }
         }
         else
         {
-            request.getServletContext().getRequestDispatcher("/").forward(request, response);
+            response.getWriter().write("/");
         }
-    }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGetOrPost(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGetOrPost(request, response);
     }
 }
