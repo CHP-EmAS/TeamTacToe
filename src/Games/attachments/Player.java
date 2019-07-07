@@ -1,8 +1,12 @@
 package Games.attachments;
 
 import Interfaces.DatabaseConnection;
+import org.json.JSONObject;
+
+import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.sql.*;
 
 public class Player {
     private Session socketSession;
@@ -11,16 +15,21 @@ public class Player {
     private String nickname;
     private Boolean registeredPlayer;
 
-    public Player(String nickname, Boolean registeredPlayer) {
-        if(registeredPlayer)
+    public Player(Session playerSession) {
+        socketSession = playerSession;
+
+        if(playerSession == null)
         {
-            DatabaseConnection conn = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
-            if(conn.isReady()) System.out.println("Datenbankverbindung erfolgreich!");
-            else System.out.println("Datenbankverbindung fehlgeschlagen!");
+            httpSessionID = "NULL_SESSION";
+            return;
         }
+
+        HttpSession temp = (HttpSession) socketSession.getUserProperties().get("sessionID");
+
+        httpSessionID = temp.getId();
     }
 
-    public Boolean sendMessage(String msg, Session socketSession) {
+    public Boolean sendMessage(String msg) {
         try {
             socketSession.getBasicRemote().sendText(msg);
             return true;
@@ -29,4 +38,17 @@ public class Player {
             return false;
         }
     }
+
+    public Boolean sendInfoMessage(String msg) {
+        JSONObject json = new JSONObject();
+        json.put("cmd","infoMsg");
+        json.put("content",msg);
+
+        return sendMessage(json.toString());
+    }
+
+    public String getPlayerName(){return nickname;}
+    public String getHttpSessionID(){return httpSessionID;}
+    public Boolean isRegisteredPlayer(){return registeredPlayer;}
+    public Session getSession(){return socketSession;}
 }

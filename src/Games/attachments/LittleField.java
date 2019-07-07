@@ -11,8 +11,8 @@ public class LittleField {
 	}
 	
 	public Tile getTile(int fieldNumber) {
-		if ((fieldNumber>=1) && (fieldNumber<=9)) {
-			return field[fieldNumber-1];
+		if ((fieldNumber>0) && (fieldNumber<=8)) {
+			return field[fieldNumber];
 		}else {
 			return errorTile;
 		}

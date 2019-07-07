@@ -39,7 +39,7 @@ body {
 	display: inline-block;
 	vertical-align: top;
 }
-button {
+.gameButton {
 	min-width: 200px;
 	min-height: 60px;
 	padding: 16px;

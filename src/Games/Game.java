@@ -1,7 +1,8 @@
 package Games;
 
 import javax.websocket.Session;
-import java.io.IOException;
+import Games.attachments.*;
+import java.util.HashMap;
 
 /**
  * Game Klasse - Parent-Objekt zu den jeweiligen Spieltypen
@@ -19,7 +20,37 @@ import java.io.IOException;
  */
 public class Game
 {
+    public enum GameType {
+        TicTacToe("TTT"),
+        Super_TicTacToe("STTT"),
+        Fancy_TicTacToe("FTTT"),
+        Inception_TicTacToe("ITTT"),
+        NONE("NONE");
+
+        private final String shortcut;
+        GameType(String shortcut) { this.shortcut = shortcut; }
+        public String shortcut() { return this.shortcut; }
+    }
+
+    public enum Gamestate {
+        WAITING_FOR_PLAYER,
+        RUNNING,
+        PAUSED,
+        CLOSED,
+        CREATED
+    }
+
+    protected String gameID;
+    protected final static Player errorPlayer = new Player(null);
     protected Gamestate gamestate;
+    protected final GameType gametype;
+
+    public Game(GameType type) {
+        gameID = "";
+        gametype = type;
+        gamestate = Gamestate.CREATED;
+    }
+
     /**
      * addPlayer fügt Sessionobjekte(Spieler) zum Spiel hinzu.
      * @param session Sessionobjekt des Clients.
@@ -32,10 +63,10 @@ public class Game
 
     /**
      * removePlayer löscht  Sessionobjekte(Spieler) aus dem Spiel.
-     * @param session Sessionobjekt des Clients.
+     * @param httpSessionID Sessionobjekt des Clients.
      * @return Boolen gibt an ob die Operation erfolgreich war.
      */
-    public Boolean removePlayer(final Session session)
+    public Boolean removePlayer(String httpSessionID)
     {
         return false;
     }
@@ -51,10 +82,10 @@ public class Game
 
     /**
      * isPlayerInGame zeig an ob ein bestimmter Spieler im Spiel ist.
-     * @param session Sessionobjekt des Clients.
+     * @param httpSessionID Sessionobjekt des Clients.
      * @return Boolen gibt an ob sich der Spieler im Spiel befindet.
      */
-    public Boolean isPlayerInGame(final Session session)
+    public Boolean isPlayerInGame(String httpSessionID)
     {
         return false;
     }
@@ -62,25 +93,9 @@ public class Game
     /**
      * receiveMessage wird aufgerufen wenn eine Nachricht durch den Websock an dies Spielobjekt empfangen wurde.
      * @param cmd String - ist der Inhalt der Nachricht.
-     * @param player Sessionobjekt des Senders.
+     * @param httpSessionID Sessionobjekt des Senders.
      */
-    public void receiveMessage(String cmd, final Session player) {}
-
-    /**
-     * sendMsg sended eine Nachricht an eine Clienten
-     * @param msg String - Nachricht
-     * @param player Sessionobjekt des Empfängers.
-     * @return Boolen gibt an ob die Operation erfolgreich war.
-     */
-    protected Boolean sendMsg(String msg, final Session player) {
-        try {
-            player.getBasicRemote().sendText(msg);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+    public void receiveMessage(String cmd, String httpSessionID) {}
 
     /**
      * closeGame schließt ein Spielobjekt sicher. Alle Verbindungen werden dabei getrennt.
@@ -90,12 +105,21 @@ public class Game
     {
         return false;
     }
-}
 
-enum Gamestate
-{
-    WAITING_FOR_PLAYER,
-    RUNNING,
-    PAUSED,
-    RESTARTING
+    public Player getPlayer(String httpSessionID) { return errorPlayer; }
+
+    public static GameType getGameType(String shortcut) {
+        switch (shortcut) {
+            case "TTT":
+                return GameType.TicTacToe;
+            case "STTT":
+                return GameType.Super_TicTacToe;
+            case "FTTT":
+                return GameType.Fancy_TicTacToe;
+            case "ITTT":
+                return GameType.Inception_TicTacToe;
+            default:
+                return GameType.NONE;
+        }
+    }
 }

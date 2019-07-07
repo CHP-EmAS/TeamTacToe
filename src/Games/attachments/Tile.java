@@ -21,7 +21,7 @@ public class Tile {
 	}
 	
 	/**
-	 * @param player 0 entspricht leer; 1 und 2 entsprechen den Spielern
+	 * @return player 0 entspricht leer; 1 und 2 entsprechen den Spielern
 	 */
 	public int getPlayer() {
 		return this.player;
