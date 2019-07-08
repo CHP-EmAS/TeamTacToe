@@ -1,32 +1,35 @@
 package Games.attachments;
 
-import Interfaces.DatabaseConnection;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
-import java.sql.*;
+import beans.UserBean;
 
 public class Player {
     private Session socketSession;
     private String httpSessionID;
 
-    private String nickname;
-    private Boolean registeredPlayer;
+    private UserBean user;
 
     public Player(Session playerSession) {
         socketSession = playerSession;
-
         if(playerSession == null)
         {
             httpSessionID = "NULL_SESSION";
+            user = null;
+
             return;
         }
 
-        HttpSession temp = (HttpSession) socketSession.getUserProperties().get("sessionID");
+        HttpSession tempSession = (HttpSession) socketSession.getUserProperties().get("session");
 
-        httpSessionID = temp.getId();
+        httpSessionID = tempSession.getId();
+
+        user = (UserBean) tempSession.getAttribute("user");
+
+        System.out.println("Player: Player <" + getPlayerName() + "> added.");
     }
 
     public Boolean sendMessage(String msg) {
@@ -39,16 +42,25 @@ public class Player {
         }
     }
 
-    public Boolean sendInfoMessage(String msg) {
+    public void sendInfoMessage(String msg) {
         JSONObject json = new JSONObject();
         json.put("cmd","infoMsg");
         json.put("content",msg);
 
-        return sendMessage(json.toString());
+        sendMessage(json.toString());
     }
 
-    public String getPlayerName(){return nickname;}
+    public String getPlayerName() {
+        if(user != null) return user.getNickname();
+        else if(httpSessionID.equals("NULL_SESSION")) return "Error Player";
+        else return "Gast";
+    }
+
+    public Boolean isRegisteredPlayer() {
+        if(user != null) return user.isValid();
+        else return false;
+    }
+
     public String getHttpSessionID(){return httpSessionID;}
-    public Boolean isRegisteredPlayer(){return registeredPlayer;}
     public Session getSession(){return socketSession;}
 }

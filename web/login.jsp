@@ -7,13 +7,13 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:useBean id="userBean" class="Beans.UserBean" scope="request"/>
+<jsp:useBean id="userBean" class="beans.UserBean" scope="request"/>
 <html>
 <head>
     <title>Tic Tac Toe Login</title>
 </head>
 <body>
-    <form action="Validate" class="form-container" method="post">
+    <form action="validate" class="form-container" method="post">
         <h1>Login</h1>
 
         <p><jsp:getProperty property="alert" name="userBean"/></p>

@@ -7,8 +7,7 @@ public class DatabaseConnection
     private Connection conn = null;
     private Boolean connectionReady;
 
-    public DatabaseConnection(String databaseName,String user, String passwd)
-    {
+    public DatabaseConnection(String databaseName,String user, String passwd) {
         connectionReady = openConnection(databaseName,user, passwd);
     }
 
@@ -26,23 +25,18 @@ public class DatabaseConnection
         return false;
     }
 
-    public Boolean closeConnection()
-    {
+    public void closeConnection() {
         try
         {
             conn.close();
-            return true;
         }
         catch (SQLException se)
         {
             se.printStackTrace();
         }
-
-        return false;
     }
 
-    public ResultSet executeQuery(String query )
-    {
+    public ResultSet executeQuery(String query) {
         if(conn == null)
         {
             System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
@@ -65,9 +59,15 @@ public class DatabaseConnection
 
         return null;
     }
+    public PreparedStatement getPrepareStatement(String sqlQuery) {
+        try
+        {
+            return conn.prepareStatement(sqlQuery);
+        }
+        catch(SQLException e){e.printStackTrace();}
 
-    public Boolean isReady()
-    {
-        return connectionReady;
+        return null;
     }
+
+    public Boolean isReady() {return connectionReady; }
 }
