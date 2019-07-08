@@ -35,9 +35,15 @@
 	</div>
 	<div id="d2">
 		<div id="d2_1">
-			<button onclick="fieldClick(1)">Normal Tic Tac Toe</button>
+			<button onclick="fieldClick(1)">Tic Tac Toe</button>
 			<br>
-			<button onclick="fieldClick(1)">Ultimate Tic Tac Toe</button>
+			<button onclick="fieldClick(1)">Super Tic Tac Toe</button>
+			<br>
+			<button onclick="fieldClick(1)">Inception Tic Tac Toe</button>
+			<br>
+			<button onclick="fieldClick(1)">Fancy Tic Tac Toe</button>
+			<br>
+			<button onclick="fieldClick(1)">Join Game</button>
 			<br>
 			<button onclick="fieldClick(1)">Leaderboard</button>
 			<br>
@@ -51,6 +57,15 @@
 			 X and O, who take turns marking the spaces in a 3×3 grid.
 			 The player who succeeds in placing three of their marks in a horizontal,
 			vertical, or diagonal row wins the game.</p>
+			<p>
+			Auf einem quadratischen, 3×3 Felder großen Spielfeld setzen die beiden Spieler abwechselnd ihr Zeichen (ein Spieler Kreuze, der andere Kreise) in ein freies Feld.
+			Der Spieler, der als Erster drei Zeichen in eine Zeile, Spalte oder Diagonale setzen kann, gewinnt. Wenn allerdings beide Spieler optimal spielen, kann keiner gewinnen,
+			und es kommt zu einem Unentschieden.
+			Das heißt, alle neun Felder sind gefüllt, ohne dass ein Spieler die erforderlichen Zeichen in einer Reihe, Spalte oder Diagonalen setzen konnte.
+			</p>
+			<p>"If you're going to perform inception, you need imagination."
+			<br>
+			- Christopher Nolan, Inception: The Shooting Script</p>
 		</div>
 	</div>
 	<div id="d3">
