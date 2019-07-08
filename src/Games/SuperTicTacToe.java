@@ -41,7 +41,7 @@ public class SuperTicTacToe extends Game{
 	@Override
 	public Boolean addPlayer(final Session playerSession)
 	{
-		String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("sessionID")).getId();
+		String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("session")).getId();
 
 		if(gamestate != Gamestate.WAITING_FOR_PLAYER || isPlayerInGame(httpSessionID)) return false;
 

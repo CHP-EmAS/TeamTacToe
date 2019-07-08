@@ -13,7 +13,7 @@
     <title>Tic Tac Toe Login</title>
 </head>
 <body>
-    <form action="Validate" class="form-container" method="post">
+    <form action="validate" class="form-container" method="post">
         <h1>Login</h1>
 
         <p><jsp:getProperty property="alert" name="userBean"/></p>

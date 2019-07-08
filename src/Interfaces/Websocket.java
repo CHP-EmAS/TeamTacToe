@@ -28,7 +28,7 @@ public class Websocket {
     @OnOpen
     static public void open(final Session session, EndpointConfig config){
 
-        HttpSession httpSession = (HttpSession) config.getUserProperties().get("sessionID");
+        HttpSession httpSession = (HttpSession) config.getUserProperties().get("session");
         System.out.println("Websocket: New Socket opened with SessionID: <" + httpSession.getId() + ">");
 
         session.setMaxIdleTimeout(300000);
@@ -41,8 +41,7 @@ public class Websocket {
      */
     @OnMessage
     static public void onMessage(String message, final Session session) {
-        String httpSessionID = ((HttpSession)session.getUserProperties().get("sessionID")).getId();
-
+        String httpSessionID = ((HttpSession)session.getUserProperties().get("session")).getId();
         JSONObject obj = new JSONObject(message);
 
         if(obj.has("forward"))
@@ -95,7 +94,7 @@ public class Websocket {
      */
     @OnClose
     static public void onClose(final Session session){
-        String httpSessionID = ((HttpSession)session.getUserProperties().get("sessionID")).getId();
+        String httpSessionID = ((HttpSession)session.getUserProperties().get("session")).getId();
 
         String gameID = "";
         if(session.getRequestParameterMap().containsKey("gameID")) gameID = session.getRequestParameterMap().get("gameID").get(0);
@@ -153,7 +152,7 @@ public class Websocket {
         String newGameID;
 
         //Zeichen die GamID enthalten darf
-        final String alpha_string_numeric = "ABCDEFGHIJKLMNOPQRSTUVW0123456789";
+        final String alpha_string_numeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         //GameID generieren
         do {

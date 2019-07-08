@@ -12,10 +12,18 @@ import java.util.Map;
 
 import Beans.UserBean;
 
-@WebServlet("/Validate")
+@WebServlet("/validate")
 public class loginController extends HttpServlet
 {
     private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        //Wenn ein angemeldeter Nutzer in der Session existiert -> löschen
+        if(request.getSession(false) != null)
+        {
+            if(request.getSession().getAttribute("user") != null)
+                request.getSession().removeAttribute("user");
+        }
+
         UserBean userBean = new UserBean();
         request.setAttribute("userBean", userBean);
 
@@ -34,14 +42,11 @@ public class loginController extends HttpServlet
             if(userBean.isValid())
             {
                 request.getSession(true).setAttribute("user", userBean);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("/");
             }
-            else request.getServletContext().getRequestDispatcher("/Login").forward(request, response);
+            else request.getServletContext().getRequestDispatcher("Login").forward(request, response);
         }
-        else
-        {
-            response.sendRedirect("Login");
-        }
+        else response.sendRedirect("Login");
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGetOrPost(request, response);
