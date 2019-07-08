@@ -10,7 +10,7 @@ else socket = new WebSocket("ws://" + window.location.host.split(":")[0] + ":808
 
 socket.onopen = function ()
 {
-    socket.send('{"cmd":"connect","gameID":'+gameID+',"nickname":"EmAS","passwd":""}');
+    socket.send('{"cmd":"connect","gameID":'+gameID+'}');
 };
 
 socket.onclose = function ()

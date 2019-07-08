@@ -68,7 +68,7 @@ public class Websocket {
                 switch (obj.getString("cmd"))
                 {
                     case "connect":
-                        if(obj.has("gameID") && obj.has("nickname") && obj.has("passwd")) {
+                        if(obj.has("gameID")) {
                             if(gameSessions.containsKey(obj.getString("gameID"))) {
                                 if(!getGameByID(obj.getString("gameID")).isPlayerInGame(httpSessionID)) {
                                     if(!getGameByID(obj.getString("gameID")).addPlayer(session))
