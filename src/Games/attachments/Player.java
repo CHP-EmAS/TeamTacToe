@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
-import beans.UserBean;
+import Beans.UserBean;
 
 public class Player {
     private Session socketSession;

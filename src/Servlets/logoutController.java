@@ -18,6 +18,7 @@ public class logoutController extends HttpServlet
             request.getSession().removeAttribute("user");
         }
 
+        response.getWriter().write("logout");
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGetOrPost(request, response);

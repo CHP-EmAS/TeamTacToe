@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:useBean id="user" class="beans.UserBean" scope="session"/>
+<jsp:useBean id="user" class="Beans.UserBean" scope="session"/>
 
 <!DOCTYPE html>
 <html>
@@ -30,7 +30,7 @@
 <body>
 <div id="container">
 	<div id="d1">
-		<h1>Tic Tac Toe <jsp:getProperty property="nickname" name="user"/></h1>
+		<h1>Tic Tac Toe <jsp:getProperty property="nickname" name="user"/> <jsp:getProperty property="score" name="user"/></h1>
 	</div>
 	<div id="d2">
 		<div id="d2_1">
