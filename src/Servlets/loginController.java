@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.Map;
 
-import Beans.UserBean;
+import beans.UserBean;
 
 @WebServlet("/validate")
 public class loginController extends HttpServlet
@@ -18,12 +18,12 @@ public class loginController extends HttpServlet
     private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //Wenn ein angemeldeter Nutzer in der Session existiert -> löschen
-        if(request.getSession(false) != null)
+        /**if(request.getSession(false) != null)
         {
             if(request.getSession().getAttribute("user") != null)
                 request.getSession().removeAttribute("user");
         }
-
+         **/
         UserBean userBean = new UserBean();
         request.setAttribute("userBean", userBean);
 

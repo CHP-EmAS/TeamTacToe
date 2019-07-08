@@ -1,32 +1,32 @@
-package Beans;
+package beans;
 
-import Interfaces.DatabaseConnection;
+//import java.sql.PreparedStatement;
 
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public class UserBean
 {
     private String nickname;
     private String password;
 
-    private int score;
+    //private int score;
 
     private String alert;
     private boolean isValid;
 
-    public UserBean() {
+    public UserBean()
+    {
         nickname = "";
         password = "";
 
-        score = 0;
+        //score = 0;
 
         alert = "";
         isValid = false;
     }
 
-    public void validateLogin() {
+    public void validateLogin()
+    {
+        /**
         isValid = false;
 
         DatabaseConnection db = new DatabaseConnection("TeamTacToe","tomcat","tomcat");
@@ -61,8 +61,9 @@ public class UserBean
             alert = "Login momentan nicht möglich! :(";
             System.out.println("UserBean: Failed to connect to Database!");
         }
+         **/
     }
-
+/**
     public void addScore(int n) {
         if(!isValid || n == 0){
             System.out.println("UserBean: Cannot add score to User! ERROR: User not valid or n=0");
@@ -102,13 +103,30 @@ public class UserBean
         }
         else System.out.println("UserBean: Failed to connect to Database!");
     }
+**/
+    public void setNickname(String name)
+    {
+        this.nickname = name;
+    }
 
-    public void setNickname(String name) { this.nickname = name; }
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
 
-    public boolean isValid() { return isValid; }
+    public boolean isValid()
+    {
+        return isValid;
+    }
 
-    public String getAlert() { return alert; }
-    public String getNickname(){return nickname;}
-    public int getScore() { return score; }
+    public String getAlert()
+    {
+        return alert;
+    }
+
+    public String getNickname()
+    {
+        return nickname;
+    }
+    //public int getScore() { return score; }
 }
