@@ -41,7 +41,7 @@ public class SuperTicTacToe extends Game{
 	@Override
 	public Boolean addPlayer(final Session playerSession)
 	{
-		String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("session")).getId();
+		String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("sessionID")).getId();
 
 		if(gamestate != Gamestate.WAITING_FOR_PLAYER || isPlayerInGame(httpSessionID)) return false;
 
@@ -253,12 +253,12 @@ public class SuperTicTacToe extends Game{
 		if(gamestate == Gamestate.RUNNING)
 		{
 			if (playerOne != null && playerTwo != null) {
-				if (fieldNum > 0 && fieldNum < 82) {
+				if (fieldNum >= 0 && fieldNum < 81) {
 					if (player == currentPlayer) {
-						if (fields[(fieldNum-1)/9]==currentField && currentField.getTile((fieldNum-1)%9+1).getPlayer()==0) {
+						if (fields[(fieldNum)/9]==currentField && currentField.getTile((fieldNum)%9).getPlayer()==0) {
 
 							//ändert currentField gleich mit
-							setTile((fieldNum-1)%9+1);
+							setTile((fieldNum)%9);
 
 							updateUserField();
 
@@ -321,15 +321,15 @@ public class SuperTicTacToe extends Game{
 	 * @return int-Array mit Belegung des Feldes
 	 */ 
 	private int getLittleFieldResult(int number) {
-		if((number>=1)&&(number<=9)) {
-			return fields[number-1].getResult();
+		if((number>=0)&&(number<=8)) {
+			return fields[number].getResult();
 		}
 		return 42;
 	}
 
 	private int getCompleteResult() {
 		//Durch Spalten durchgehen
-		for(int i=1; i<4; i++) {
+		for(int i=0; i<2; i++) {
 			if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+3) == 1)&&(getLittleFieldResult(i+6) == 1)) {
 				return 1;
 			}else {
@@ -339,7 +339,7 @@ public class SuperTicTacToe extends Game{
 			}
 		}
 		//Durch Reihen durchgehen
-		for(int i=1; i<8; i+=3) {
+		for(int i=0; i<7; i+=3) {
 			if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+1) == 1)&&(getLittleFieldResult(i+2) == 1)) {
 				return 1;
 			}else {
@@ -349,17 +349,17 @@ public class SuperTicTacToe extends Game{
 			}
 		}
 		//Diagonale oben links nach unten rechts prüfen
-		if((getLittleFieldResult(1) == 1)&&(getLittleFieldResult(5) == 1)&&(getLittleFieldResult(9) == 1)) {
+		if((getLittleFieldResult(0) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(8) == 1)) {
 			return 1;
 		}
-		if((getLittleFieldResult(1) == 2)&&(getLittleFieldResult(5) == 2)&&(getLittleFieldResult(9) == 2)) {
+		if((getLittleFieldResult(0) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(8) == 2)) {
 			return 2;
 		}
 		//Diagonale oben rechts nach unten links prüfen
-		if((getLittleFieldResult(3) == 1)&&(getLittleFieldResult(5) == 1)&&(getLittleFieldResult(7) == 1)) {
+		if((getLittleFieldResult(2) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(6) == 1)) {
 			return 1;
 		}
-		if((getLittleFieldResult(3) == 2)&&(getLittleFieldResult(5) == 2)&&(getLittleFieldResult(7) == 2)) {
+		if((getLittleFieldResult(2) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(6) == 2)) {
 			return 2;
 		}
 		return 0;
@@ -368,7 +368,7 @@ public class SuperTicTacToe extends Game{
 	private int getCurrentField() {
 		for(int i=0; i<=8; i++) {
 			if(this.fields[i] == this.currentField) {
-				return i+1;
+				return i;
 			}
 		}
 		return 42;
@@ -396,8 +396,8 @@ public class SuperTicTacToe extends Game{
 			//Neues aktuelles Feld, entpsrechend der Nummer des gesetzten Feldes. Wenn dieses schon abgeschlossen ist wird ein
 			//zufälliges gesetzt
 			int nextField;
-			if(fields[number-1].getResult()==0){
-				nextField=number-1;
+			if(fields[number].getResult()==0){
+				nextField=number;
 			}else{
 				do {
 					nextField = rnd.nextInt(9);
