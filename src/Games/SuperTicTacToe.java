@@ -329,7 +329,7 @@ public class SuperTicTacToe extends Game{
 
 	private int getCompleteResult() {
 		//Durch Spalten durchgehen
-		for(int i=0; i<2; i++) {
+		for(int i=0; i<3; i++) {
 			if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+3) == 1)&&(getLittleFieldResult(i+6) == 1)) {
 				return 1;
 			}else {
