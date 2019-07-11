@@ -39,7 +39,7 @@ public class InceptionTicTacToe extends Game{
 		wonByPlayerTwo = 0;
 	}
 	
-	public void FieldClick(Player player, int field) {
+	public void fieldClick(Player player, int field) {
 		switch(currentGameType) {
 		case TicTacToe:
 			startGame.click(player, field);
@@ -160,7 +160,7 @@ public class InceptionTicTacToe extends Game{
 			switch(obj.getString("cmd"))
 			{
 				case "click":
-					fieldClick(obj.getInt("fieldNum"), sender);
+					fieldClick(sender, obj.getInt("fieldNum"));
 					break;
 				case "reset":
 					if(getPlayerAmount() == 2) {
@@ -472,7 +472,7 @@ public class InceptionTicTacToe extends Game{
 	 * Beginnt neue Spielrunde mit SuperTicTacToe Feld.
 	 * origin nur zum weiterleiten an setLastWonField
 	 * @param player last Winner
-	 * @param game neue Spielinstanz
+	 * @param field neue Spielinstanz
 	 * @param origin true wenn vorherige Instanz vom Typ TicTacToe
 	 * 				 false wenn vorherige Instanz vom Typ SuperTicTacToe
 	 */
