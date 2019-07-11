@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class Websocket {
     /////////////////////****VARIABLES****/////////////////////
     private static final int GAME_ID_LENGTH = 11; //Länge der zu generierenden GameID. Darf nicht 0 sein
-    private static final int MAX_GAME_AMOUNT = 100; //Maximale Spiel anzahl
+    private static final int MAX_GAME_AMOUNT = 50; //Maximale Spiel anzahl
 
     private static HashMap<String, Game> gameSessions = new HashMap<>(); //Hashmap wird zum Speichern der Spielobjekte und dessen jeweilige GameID verwendet
 
@@ -151,7 +151,7 @@ public class Websocket {
 
         String newGameID;
 
-        //Zeichen die GamID enthalten darf
+        //Zeichen die GameID enthalten darf
         final String alpha_string_numeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         //GameID generieren
