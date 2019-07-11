@@ -12,11 +12,11 @@ import java.util.Map;
 
 import beans.UserBean;
 
-@WebServlet(name = "login", urlPatterns = {"/login"})
-public class loginController extends HttpServlet
+@WebServlet("/Register")
+public class RegisterController extends HttpServlet
 {
-    private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
         //Wenn ein angemeldeter Nutzer in der Session existiert -> löschen
         if(request.getSession(false) != null)
         {
@@ -29,25 +29,34 @@ public class loginController extends HttpServlet
 
         Map<String,String[]> paraMap = request.getParameterMap();
 
-        if (paraMap.containsKey("nickname") && paraMap.containsKey("pw"))
+        if (paraMap.containsKey("nickname") && paraMap.containsKey("pw") && paraMap.containsKey("repeatPw"))
         {
             String nickname = request.getParameter("nickname");
-            String passwd = request.getParameter("pw");
+            String password = request.getParameter("pw");
+            String repeatPw = request.getParameter("repeatPw");
 
             userBean.setNickname(nickname);
-            userBean.setPassword(passwd);
 
-            userBean.validateLogin();
+            if(!password.equals(repeatPw))
+            {
+                userBean.setAlert("Passwoerter stimmen nicht ueberein");
+                request.getServletContext().getRequestDispatcher("/register.jsp").forward(request, response);
+            }
+
+            userBean.setPassword(password);
+
+            userBean.register();
 
             if(userBean.isValid())
             {
                 request.getSession(true).setAttribute("user", userBean);
                 response.sendRedirect("/");
             }
-            else request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+            else request.getServletContext().getRequestDispatcher("/register.jsp").forward(request, response);
         }
-        else request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+        else response.sendRedirect("/register.jsp");
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGetOrPost(request, response);
     }

@@ -15,7 +15,8 @@ public class logoutController extends HttpServlet
         //Wenn ein angemeldeter Nutzer in der Session existiert -> löschen
         if(request.getSession(false) != null)
         {
-            request.getSession().removeAttribute("user");
+            if(request.getSession().getAttribute("user") != null)
+                request.getSession().removeAttribute("user");
         }
 
         response.getWriter().write("logout");

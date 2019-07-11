@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:useBean id="user" class="Beans.UserBean" scope="session"/>
+<jsp:useBean id="user" class="beans.UserBean" scope="session"/>
 
 <!DOCTYPE html>
 <html>
@@ -37,6 +37,8 @@
 			<button class="gameButton" onclick="createGame('TTT')">Normal Tic Tac Toe</button>
 			<br>
 			<button class="gameButton" onClick="createGame('STTT')">Super Tic Tac Toe</button>
+			<br>
+			<button class="gameButton" onClick="createGame('ITTT')">Inception Tic Tac Toe</button>
 			<br>
 			<button class="gameButton" onclick="fieldClick(1)">Leaderboard</button>
 			<br>

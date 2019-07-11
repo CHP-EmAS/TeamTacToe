@@ -15,16 +15,16 @@ import Games.attachments.LittleField;
 import Games.attachments.Player;
 
 public class InceptionTicTacToe extends Game{
-	Player playerOne, playerTwo, currentPlayer;
-	NormalGame_Instance startGame;
-	SuperGame_Instance actualGame;
-	GameType currentGameType;
-	int lastField;
-	String lastWinner;
-	int rounds;
-	int counter;
-	int wonByPlayerOne;
-	int wonByPlayerTwo;
+	private Player playerOne, playerTwo, currentPlayer;
+    private NormalGame_Instance startGame;
+    private SuperGame_Instance actualGame;
+    private GameType currentGameType;
+    private int lastField;
+    private String lastWinner;
+    private int rounds;
+    private int counter;
+    private int wonByPlayerOne;
+    private int wonByPlayerTwo;
 	
 	public InceptionTicTacToe(String GameID, int rounds){
 		super(GameType.Inception_TicTacToe);
@@ -80,6 +80,7 @@ public class InceptionTicTacToe extends Game{
 				if(generator.nextInt(2) == 1) setCurrentPlayer(playerOne);
 				else setCurrentPlayer(playerTwo);
 			}
+
 			//Sobald beide Spieler vorhanden wird Startrunde initialisiert
 			startGame = new NormalGame_Instance();
 			currentGameType = GameType.TicTacToe;

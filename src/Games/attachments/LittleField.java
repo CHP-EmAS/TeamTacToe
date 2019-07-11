@@ -1,18 +1,18 @@
 package Games.attachments;
 
 public class LittleField {
-	Tile[] field = new Tile[9];
-	Tile errorTile = new Tile();
+	private Tile[] field = new Tile[9];
+	private Tile errorTile = new Tile();
 	
 	public LittleField() {
-		for(int i=0; i<=8; i++) {
+		for(int i=0; i<9; i++) {
 			this.field[i] = new Tile();
 		}
 	}
 	
 	public Tile getTile(int fieldNumber) {
-		if ((fieldNumber>=1) && (fieldNumber<=9)) {
-			return field[fieldNumber-1];
+		if ((fieldNumber>=0) && (fieldNumber<=8)) {
+			return field[fieldNumber];
 		}else {
 			return errorTile;
 		}
@@ -20,7 +20,7 @@ public class LittleField {
 
 	public int[] getFieldArray() {
 		int[] result = new int[9];
-		for(int i= 0; i<=8; i++) {
+		for(int i= 0; i<9; i++) {
 			result[i] = this.field[i].getPlayer();
 		}
 		return result;
@@ -75,7 +75,7 @@ public class LittleField {
 
 	public void reset()
 	{
-		for(int i=0; i<=8; i++) {
+		for(int i=0; i<9; i++) {
 			this.field[i].setPlayer(0);
 		}
 	}

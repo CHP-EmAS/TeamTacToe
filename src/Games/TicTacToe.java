@@ -187,7 +187,7 @@ public class TicTacToe extends Game
         if(gamestate == Gamestate.RUNNING)
         {
             if (playerOne != null && playerTwo != null) {
-                if (fieldNum > 0 && fieldNum < 10) {
+                if (fieldNum >= 0 && fieldNum < 9) {
                     if (player == currentPlayer) {
                         if (fieldData.getTile(fieldNum).getPlayer() == 0) {
 
