@@ -15,42 +15,150 @@ import Games.attachments.LittleField;
 import Games.attachments.Player;
 
 public class InceptionTicTacToe extends Game{
-	private Player playerOne, playerTwo, currentPlayer;
-    private NormalGame_Instance startGame;
-    private SuperGame_Instance actualGame;
-    private GameType currentGameType;
-    private int lastField;
-    private String lastWinner;
-    private int rounds;
-    private int counter;
-    private int wonByPlayerOne;
-    private int wonByPlayerTwo;
+	Player playerOne, playerTwo, currentPlayer;
+	GameType currentGameType;
+	int lastField;
+	String lastWinner;
+	int rounds;
+	int counter;
+	int wonByPlayerOne;
+	int wonByPlayerTwo;
+	LittleField[] fieldArray;
+	LittleField currentField;
 	
 	public InceptionTicTacToe(String GameID, int rounds){
 		super(GameType.Inception_TicTacToe);
 		super.gameID = GameID;
 		gamestate = Gamestate.WAITING_FOR_PLAYER;
 		
-		lastField = 0;
-		lastWinner = "";
+		for(int i=0; i<=8; i++) {
+			fieldArray[i] = new LittleField();
+		}
+		currentField = fieldArray[0];
 		counter = 0;
 		this.rounds = rounds;
 		wonByPlayerOne = 0;
 		wonByPlayerTwo = 0;
 	}
 	
-	public void fieldClick(Player player, int field) {
+	public void FieldClick(Player player, int field) {
 		switch(currentGameType) {
 		case TicTacToe:
-			startGame.click(player, field);
-			checkStartGame(player, field);
+			if(currentField.getTile(field%9).getPlayer()==0) {
+				setTile(field%9);
+				switchCurrentPlayer(player);
+				int result = getCompleteResult();
+				if(result!=0) {
+					for(int i=0; i<=8; i++) {
+						currentField.getTile(i).setPlayer(0);
+					}
+					if(result==1 || result==2) {
+						for(int j=0; j<=8; j++) {
+							if(player.equals(playerOne)) {
+								fieldArray[field].getTile(j).setPlayer(1);
+								currentPlayer = playerOne;
+							}
+							if(player.equals(playerTwo)) {
+								fieldArray[field].getTile(j).setPlayer(2);
+								currentPlayer = playerTwo;
+							}
+						}
+					}
+					if(result == 1) {
+						wonByPlayerOne++;
+					}
+					if(result == 2) {
+						wonByPlayerTwo++;
+					}
+					setNextField(field);
+					currentGameType = GameType.Super_TicTacToe;
+					counter++;
+				}
+			}
 			break;
 		case Super_TicTacToe:
-			actualGame.click(player, field);
-			checkActualGame(player, field);
+			if((field>=0)&&(field<81)&&(player == currentPlayer)){
+				if((fieldArray[field/9]==currentField)&&(currentField.getTile(field%9).getPlayer()==0)) {
+					setTile(field%9);
+					switchCurrentPlayer(player);
+					int result = getCompleteResult();
+					if(result==0) {
+						setNextField(field%9);
+					}else {
+						if(counter!=rounds) {
+							for(int i=0; i<=8; i++) {
+								for(int j=0; j<=8; j++) {
+									fieldArray[i].getTile(j).setPlayer(0);
+								}
+							}
+							if(result==1 || result==2) {
+								for(int k=0; k<=8; k++) {
+									if(result==1) {
+										fieldArray[field].getTile(k).setPlayer(1);
+										currentPlayer = playerOne;
+									}
+									if(result==2) {
+										fieldArray[field].getTile(k).setPlayer(2);
+										currentPlayer = playerTwo;
+									}
+								}
+								if(result==1) {
+									wonByPlayerOne++;
+								}
+								if(result==2) {
+									wonByPlayerTwo++;
+								}
+							}
+							setNextField(field%9);
+							counter++;
+						}else {
+							if(result==1) {
+								wonByPlayerOne++;
+							}
+							if(result==2) {
+								wonByPlayerTwo++;
+							}
+						}
+					}
+				}
+			}
 			break;
 		default:
 			break;
+		}
+	}
+	
+	/**
+	 * Setzt nächstes currentField
+	 * @param number Feld das zuletzt gesetzt wurde (0-8)
+	 */
+	private void setNextField(int number) {
+		int nextField;
+		Random rnd = new Random();
+		if(fieldArray[number].getResult()!=0) {
+			do {
+				nextField = rnd.nextInt(9);
+			}while(fieldArray[nextField].getResult()!=0);
+		}else {
+			nextField = number;
+		}
+		currentField = fieldArray[nextField];
+	}
+	
+	private void setTile(int number) {
+		if(this.playerOne.equals(this.currentPlayer) && number>0 && number<=9) {
+			this.currentField.getTile(number).setPlayer(1);
+		}else if(this.playerTwo.equals(this.currentPlayer) && number>0 && number<=9) {
+			this.currentField.getTile(number).setPlayer(2);
+		}
+	}
+	
+	private void switchCurrentPlayer(Player player) {
+		if(player.equals(playerOne)) {
+			currentPlayer = playerTwo;
+		}
+		if(player.equals(playerTwo)) {
+			currentPlayer = playerOne;
 		}
 	}
 	
@@ -77,14 +185,9 @@ public class InceptionTicTacToe extends Game{
 			if(currentPlayer == null)
 			{
 				Random generator = new Random();
-				if(generator.nextInt(2) == 1) setCurrentPlayer(playerOne);
-				else setCurrentPlayer(playerTwo);
+				if(generator.nextInt(2) == 1) currentPlayer = playerOne;
+				else currentPlayer=playerTwo;
 			}
-
-			//Sobald beide Spieler vorhanden wird Startrunde initialisiert
-			startGame = new NormalGame_Instance();
-			currentGameType = GameType.TicTacToe;
-			setPlayers();
 			
 			updateUserField();
 			gamestate = Gamestate.RUNNING;
@@ -161,18 +264,21 @@ public class InceptionTicTacToe extends Game{
 			switch(obj.getString("cmd"))
 			{
 				case "click":
-					fieldClick(sender, obj.getInt("fieldNum"));
+					fieldClick(obj.getInt("fieldNum"), sender);
 					break;
 				case "reset":
 					if(getPlayerAmount() == 2) {
-						if(currentPlayer != null) setCurrentPlayer(currentPlayer);
-						else setCurrentPlayer(playerOne);
+						if(currentPlayer != null) {}
+						else currentPlayer = playerOne;
 						
 						//Spiel wird resettet, Rundenanzahl auf 0 gesetzt und neue Startrunnde initialisiert
 						counter = 0;
 						currentGameType = GameType.TicTacToe;
-						startGame = new NormalGame_Instance();
-						setPlayers();
+						for(int i=0; i<=8; i++) {
+							for(int j=0; j<=8; j++) {
+								fieldArray[i].getTile(j).setPlayer(0);
+							}
+						}
 
 						updateUserField();
 						gamestate = Gamestate.RUNNING;
@@ -230,12 +336,67 @@ public class InceptionTicTacToe extends Game{
 		if(playerTwo != null) playerTwo.sendMessage(json.toString());
 	}
 	
+	public int getCompleteResult() {
+		switch(currentGameType) {
+		case TicTacToe:
+			return currentField.getResult();
+		case Super_TicTacToe:
+			//Durch Spalten durchgehen
+			for(int i=0; i<3; i++) {
+				if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+3) == 1)&&(getLittleFieldResult(i+6) == 1)) {
+					return 1;
+				}else {
+					if((getLittleFieldResult(i) == 2)&&(getLittleFieldResult(i+3) == 2)&&(getLittleFieldResult(i+6) == 2)) {
+						return 2;
+					}
+				}
+			}
+			//Durch Reihen durchgehen
+			for(int i=0; i<=6; i+=3) {
+				if((getLittleFieldResult(i) == 1)&&(getLittleFieldResult(i+1) == 1)&&(getLittleFieldResult(i+2) == 1)) {
+					return 1;
+				}else {
+					if((getLittleFieldResult(i) == 2)&&(getLittleFieldResult(i+1) == 2)&&(getLittleFieldResult(i+2) == 2)) {
+						return 2;
+					}
+				}
+			}
+			//Diagonale oben links nach unten rechts prüfen
+			if((getLittleFieldResult(0) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(8) == 1)) {
+				return 1;
+			}
+			if((getLittleFieldResult(0) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(8) == 2)) {
+				return 2;
+			}
+			//Diagonale oben rechts nach unten links prüfen
+			if((getLittleFieldResult(2) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(6) == 1)) {
+				return 1;
+			}
+			if((getLittleFieldResult(2) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(6) == 2)) {
+				return 2;
+			}
+			boolean playable = false;
+			for(int i=0; i<=80; i++) {
+				if(fieldArray[i/9].getTile(i%9).getPlayer()==0) {
+					playable = true;
+				}
+			}
+			if(!playable) {
+				return -1;
+			}else {
+				return 0;
+			}
+		default:
+			return 42;
+		}
+	}
+	
 	/**
 	 * Nach jeder Spielrunde wird der counter um 1 nach oben gezählt.
 	 * Wenn counter == rounds wird das Gesamtergebnis bestimmt.
 	 * @return Spielergebnis
 	 */
-	public int getCompleteResult() {	
+	public int getEndResult() {	
 		if(counter == rounds) {
 			if(wonByPlayerOne>wonByPlayerTwo) {
 				return 1;
@@ -262,10 +423,10 @@ public class InceptionTicTacToe extends Game{
 	 */
 	public int getLittleFieldResult(int number) {
 		if(currentGameType == GameType.TicTacToe) {
-			return startGame.getLittleFieldResult(number);
+			return getCompleteResult();
 		}
 		if(currentGameType == GameType.Super_TicTacToe) {
-			return actualGame.getLittleFieldResult(number);
+			return fieldArray[number].getResult();
 		}
 		return -1;
 	}
@@ -274,27 +435,23 @@ public class InceptionTicTacToe extends Game{
 	 * @return Array mit dem Zustand des aktuellen Spielfeldes. int[8] bei TicTacToe, int[81] bei SuperTicTacToe
 	 */
 	public int[] getCompleteFieldArray() {
-		if(currentGameType == GameType.TicTacToe) {
-			return startGame.getField();
+		int[] result = new int[81];
+		for(int i=0; i<=80; i++) {
+			result[i] = fieldArray[(i/9)].getFieldArray()[(i % 9)];
 		}
-		if(currentGameType == GameType.Super_TicTacToe) {
-			return actualGame.getField();
-		}
-		int[] error = new int[1];
-		return error;
+		return result;
 	}
 	/**
 	 * Leitet je nach aktuellem Feldtyp auf Funktionen der Spielinstanzen weiter.
 	 * @return aktives Teilfeld; -1 bei Error
 	 */
 	public int getCurrentField() {
-		if(currentGameType == GameType.TicTacToe) {
-			return startGame.getCurrentField();
+		for(int i=0; i<=8; i++) {
+			if(this.fieldArray[i] == this.currentField) {
+				return i;
+			}
 		}
-		if(currentGameType == GameType.Super_TicTacToe){
-			return actualGame.getCurrentField();
-		}
-		return -1;
+		return 42;
 	}
 	/**
 	 * @return GameType.Inception_TicTacToe
@@ -309,192 +466,5 @@ public class InceptionTicTacToe extends Game{
 	public GameType getGameTypeOfField() {
 		return currentGameType;
 	}
-	/**
-	 * Setzt Spieler 1 für aktuelle Spielinstanz. 
-	 * Wird bei neuer Instanzierung(Start, Reset oder neue Runde) in Funktion setPlayers() aufgerufen.
-	 * Um Spieler dem gesamtem Spiel hinzuzufügen wird addPlayer verwendet.
-	 * @return boolean for success
-	 */
-	private boolean setPlayerOne() {
-			switch(currentGameType) {
-			case TicTacToe:
-				startGame.setPlayerOne(this.playerOne);
-				return true;
-			case Super_TicTacToe:
-				actualGame.setPlayerOne(this.playerOne);
-				return true;
-			default:
-				return false;
-			}
-	}
-	/**
-	 * Setzt Spieler 2 für aktuelle Spielinstanz. 
-	 * Wird bei neuer Instanzierung(Start, Reset oder neue Runde) in Funktion setPlayers() aufgerufen.
-	 * Um Spieler dem gesamtem Spiel hinzuzufügen wird addPlayer verwendet.
-	 * @return boolean for success
-	 */
-	private boolean setPlayerTwo() {
-			switch(currentGameType) {
-			case TicTacToe:
-				startGame.setPlayerTwo(this.playerTwo);
-				return true;
-			case Super_TicTacToe:
-				actualGame.setPlayerTwo(this.playerTwo);
-				return true;
-			default:
-				return false;
-			}
-	}
-	/**
-	 * Prüft ob übergebener Spieler schon als PlayerOne oder PlayerTwo gesetzt wurde.
-	 * Setzt dann CurrentPlayer sowohl für gesamtes Spiel als auch für Spielinstanz.
-	 * @param player Player-Object
-	 */
-	public void setCurrentPlayer(Player player) {
-		if(player.equals(playerOne)) {
-			this.currentPlayer = this.playerOne;
-			switch(currentGameType) {
-			case TicTacToe:
-				startGame.setCurrentPlayer(player);
-				break;
-			case Super_TicTacToe:
-				actualGame.setCurrentPlayer(player);
-				break;
-			default:
-			}
-		}
-		if(player.equals(playerTwo)) {
-			this.currentPlayer = this.playerTwo;
-			switch(currentGameType) {
-			case TicTacToe:
-				startGame.setCurrentPlayer(player);
-				break;
-			case Super_TicTacToe:
-				actualGame.setCurrentPlayer(player);
-				break;
-			default:
-				break;
-			}
-		}
-	}
-	/**
-	 * Prüft Status des Anfangsspiels mit kleinem TicTacToe Feld.
-	 * Ist dieses abgeschlossen wird die nächste Runde initialisiert mit einem SuperTicTacToe Feld.
-	 * Zähler für Ergebniscount wird hochgezählt. Muss auch übergeben werden auf welchem Feld der letzte Zug war.
-	 * @param player Player-Object des Siegers
-	 * @param field Mit welchem Feld wurde abgeschlossen. 
-	 */
-	private void checkStartGame(Player player, int field) {
-		if(startGame.getCompleteResult()!=0) {
-			switch(startGame.getCompleteResult()) {
-			case 1:
-				wonByPlayerOne+=1;
-				break;
-			case 2:
-				wonByPlayerTwo+=1;
-				break;
-			}
-			currentGameType = GameType.Super_TicTacToe;
-			resetActualGame(player, field, true);
-		}else {
-			if(currentPlayer.equals(playerOne)) {
-				setCurrentPlayer(playerTwo);
-			}else {
-				setCurrentPlayer(playerOne);
-			}
-		}
-	}
-	/**
-	 * Prüft ob Status der SuperTicTacToe Instanz.
-	 * Wenn alle Runden beendet wird keine neue Spielinstanz erzeugt
-	 * @param player Spieler der zuletzt gezogen hat
-	 * @param field Zuletzt gesetztes Feld
-	 */
-	private void checkActualGame(Player player, int field) {
-		if(counter<rounds) {
-			if(actualGame.getCompleteResult()!=0) {
-				//neue Instanz für nächtse Runde
-				resetActualGame(player, field, false);
-				counter++;
-			}else {
-				if(currentPlayer.equals(playerOne)) {
-					setCurrentPlayer(playerTwo);
-				}else {
-					setCurrentPlayer(playerOne);
-				}
-			}
-		}else {
-			switch(actualGame.getCompleteResult()) {
-			case 0:
-				if(currentPlayer.equals(playerOne)) {
-					setCurrentPlayer(playerTwo);
-				}else {
-					setCurrentPlayer(playerOne);
-				}
-				break;
-			//Wird keine neue Spielinstanz erzeugt
-			case 1:
-				wonByPlayerOne+=1;
-			case 2:
-				wonByPlayerTwo+=1;
-			}
-		}
-		currentPlayer = actualGame.currentPlayer;
-	}
-	/**
-	 * Setzt PlayerOne und PlayerTwo für Spielinstanz.
-	 */
-	private void setPlayers() {
-		setPlayerOne();
-		setPlayerTwo();
-	}
-	/**
-	 * Setzt nach neuer Instanzierung das bereits verdiente Feld für Sieger der vorherigen Runde
-	 * @param player last Winner
-	 * @param wonField Nummer des zuletzt gesetzten Feldes (0-8 nach Startrunde, sonst 0-80)
-	 * @param game neue Spielinstanz
-	 * @param origin true wenn vorherige Instanz vom Typ TicTacToe
-	 * 				 false wenn vorherige Instanz vom Typ SuperTicTacToe
-	 */
-	private void setLastWonField(Player player, int wonField, SuperGame_Instance game, boolean origin) {
-		int chosenField=0;
-		if(origin) {
-			chosenField=wonField*9;
-		}else {
-			chosenField=(wonField/9)*9;
-		}
-		game.setTile(player, chosenField);
-		game.setTile(player, chosenField+1);
-		game.setTile(player, chosenField+2);
-		game.setCurrentPlayer(player);
-	}
-	
-	/**
-	 * Beginnt neue Spielrunde mit SuperTicTacToe Feld.
-	 * origin nur zum weiterleiten an setLastWonField
-	 * @param player last Winner
-	 * @param field neue Spielinstanz
-	 * @param origin true wenn vorherige Instanz vom Typ TicTacToe
-	 * 				 false wenn vorherige Instanz vom Typ SuperTicTacToe
-	 */
-	private void resetActualGame(Player player, int field, boolean origin) {
-		int nextField;
-		Random rnd = new Random();
-		actualGame = new SuperGame_Instance();
-		
-		if(player.equals(playerOne)) {
-			wonByPlayerOne+=1;
-		}else {
-			wonByPlayerTwo+=1;
-		}
-		
-		setPlayers();
-		setCurrentPlayer(player);
-		setLastWonField(player, field, actualGame, origin);
-		
-		do {
-			nextField = rnd.nextInt(9);
-		}while(actualGame.getLittleFieldResult(nextField)!=0);
-		actualGame.setCurrentField(nextField);
-	}
 }
+
