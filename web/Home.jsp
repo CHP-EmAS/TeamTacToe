@@ -10,6 +10,13 @@
 		<%@ include file="/css/main.css" %>
 	</style>
 	<style>
+		#d1_1 {
+			display: inline-block;
+		}
+		#d1_2 {
+			float: right;
+			padding-top: 32px;
+		}
 		#d2_1 {
 			display: inline-block;
 		}
@@ -31,7 +38,17 @@
 <body>
 <div id="container">
 	<div id="d1">
-		<h1>Tic Tac Toe</h1>
+		<div id="d1_1">
+			<h1>Tic Tac Toe</h1>
+		</div>
+		<div id="d1_2">
+			<form action="...">
+				<input type="text" name="name" value="">
+  				<input type="password" name="password" value="">
+  				<input type="submit" value="Login">
+  			</form>
+  			<a href="http://google.com">Noch nicht registriert?</a>
+		</div>
 	</div>
 	<div id="d2">
 		<div id="d2_1">
