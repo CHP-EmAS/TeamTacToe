@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.io.IOException;
-import beans.UserBean;
+import javaBeans.UserBean;
 
 public class Player {
     private Session socketSession;
@@ -57,7 +57,7 @@ public class Player {
     }
 
     public Boolean isRegisteredPlayer() {
-        if(user != null) return user.isValid();
+        if(user != null) return user.getLoggedIn();
         else return false;
     }
 

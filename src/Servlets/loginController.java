@@ -10,22 +10,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.Map;
 
-import beans.UserBean;
+import javaBeans.UserBean;
 
 @WebServlet(name = "login", urlPatterns = {"/login"})
 public class loginController extends HttpServlet
 {
     private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        //Wenn ein angemeldeter Nutzer in der Session existiert -> löschen
+        //Wenn ein angemeldeter Nutzer in der Session existiert, auf home zurückkehren
         if(request.getSession(false) != null)
         {
-            if(request.getSession().getAttribute("user") != null)
-                request.getSession().removeAttribute("user");
+            if(request.getSession().getAttribute("user") != null) {
+                if(((UserBean) request.getSession().getAttribute("user")).getLoggedIn())
+                {
+                    ((UserBean) request.getSession().getAttribute("user")).setAlert("Du bist bereits angemeldet");
+                    response.sendRedirect("/");
+                    return;
+                }
+            }
         }
 
         UserBean userBean = new UserBean();
-        request.setAttribute("userBean", userBean);
+        request.getSession().setAttribute("user", userBean);
 
         Map<String,String[]> paraMap = request.getParameterMap();
 
@@ -39,14 +44,13 @@ public class loginController extends HttpServlet
 
             userBean.validateLogin();
 
-            if(userBean.isValid())
+            if(userBean.getLoggedIn())
             {
-                request.getSession(true).setAttribute("user", userBean);
                 response.sendRedirect("/");
             }
-            else request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+            else response.sendRedirect("/");
         }
-        else request.getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+        else response.sendRedirect("/");
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGetOrPost(request, response);

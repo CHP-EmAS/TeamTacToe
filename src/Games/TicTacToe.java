@@ -135,11 +135,24 @@ public class TicTacToe extends Game
                     break;
                 case "reset":
                     if(getPlayerAmount() == 2) {
-                        if(currentPlayer != null) setCurrentPlayer(currentPlayer);
-                        else setCurrentPlayer(playerOne);
-                        fieldData.reset();
-                        updateUserField();
-                        gamestate = Gamestate.RUNNING;
+                        if(getPlayerAmount() == 2 && gamestate == Gamestate.PAUSED)
+                        {
+                            if(currentPlayer != null)
+                            {
+                                if(currentPlayer.equals(playerOne)) setCurrentPlayer(playerTwo);
+                                else setCurrentPlayer(playerOne);
+                            }
+                            else setCurrentPlayer(playerOne);
+
+                            fieldData.reset();
+
+                            playerOne.sendMessage("{\"cmd\":\"disableReset\"}");
+                            playerTwo.sendMessage("{\"cmd\":\"disableReset\"}");
+
+                            updateUserField();
+                            gamestate = Gamestate.RUNNING;
+                        }
+                        break;
                     }
                     break;
             }
@@ -203,6 +216,7 @@ public class TicTacToe extends Game
                                     playerOne.sendInfoMessage("Unentschieden!");
                                     playerTwo.sendInfoMessage("Unentschieden!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
                                     gamestate = Gamestate.PAUSED;
                                     return;
                                 case 0:
@@ -213,12 +227,14 @@ public class TicTacToe extends Game
                                     playerOne.sendInfoMessage("Du hast gewonnen!");
                                     playerTwo.sendInfoMessage("Du hast verloren!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
                                     gamestate = Gamestate.PAUSED;
                                     return;
                                 case 2:
                                     playerTwo.sendInfoMessage("Du hast gewonnen!");
                                     playerOne.sendInfoMessage("Du hast verloren!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
                                     gamestate = Gamestate.PAUSED;
                                     return;
                             }

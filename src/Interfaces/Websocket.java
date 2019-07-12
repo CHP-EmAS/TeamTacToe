@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Games.*;
+import javaBeans.UserBean;
 import org.json.JSONObject;
 
 import javax.servlet.http.HttpSession;
@@ -29,7 +30,16 @@ public class Websocket {
     static public void open(final Session session, EndpointConfig config){
 
         HttpSession httpSession = (HttpSession) config.getUserProperties().get("session");
-        System.out.println("Websocket: New Socket opened with SessionID: <" + httpSession.getId() + ">");
+
+        String nickname = "Null";
+        if(httpSession.getAttribute("user") != null)
+        {
+            UserBean user = (UserBean) httpSession.getAttribute("user");
+            if(user.getLoggedIn()) nickname = user.getNickname();
+            else nickname="Gast";
+        }
+
+        System.out.println("Websocket: New Socket opened with SessionID: <" + httpSession.getId() + ">, Account: <" + nickname + ">.");
 
         session.setMaxIdleTimeout(300000);
     }
@@ -42,6 +52,9 @@ public class Websocket {
     @OnMessage
     static public void onMessage(String message, final Session session) {
         String httpSessionID = ((HttpSession)session.getUserProperties().get("session")).getId();
+
+        System.out.println("Websocket: Message from Socket <" + httpSessionID + ">: " + message);
+
         JSONObject obj = new JSONObject(message);
 
         if(obj.has("forward"))
@@ -50,8 +63,6 @@ public class Websocket {
 
             if(gameSessions.containsKey(gameID))
             {
-                System.out.println("Websocket: Message from Socket <" + httpSessionID + "> forwarded to Game <" + gameID + ">: " + message);
-
                 if(getGameByID(gameID).isPlayerInGame(httpSessionID)) getGameByID(gameID).receiveMessage(message, httpSessionID);
                 else closeClient(session,"Cannot forward Message to Game <" + obj.getString("forward") + ">. Game does not contains SessionID!");
             }
@@ -60,8 +71,6 @@ public class Websocket {
         }
         else
         {
-            System.out.println("Websocket: Message from Socket <" + httpSessionID + ">: " + message);
-
             if(obj.has("cmd"))
             {
                 switch (obj.getString("cmd"))
@@ -186,7 +195,7 @@ public class Websocket {
 
         gameSessions.put(newGameID,newGame);
 
-        System.out.println("Websocket: Game <" + newGameID + "> was sucessfully created!");
+        System.out.println("Websocket: New Game of " + gameType + " <" + newGameID + "> was sucessfully created!");
         return newGameID;
     }
 

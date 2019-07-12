@@ -39,6 +39,11 @@ socket.onmessage = function (ev)
                     break;
                 case 'enableReset':
                     document.getElementById('reset').disabled = false;
+                    document.getElementById('reset').visible = true;
+                    break;
+                case 'disableReset':
+                    document.getElementById('reset').disabled = true;
+                    document.getElementById('reset').visible = false;
                     break;
                 default:
                     console.log('Command "' + obj.cmd + '" is unknown');
@@ -75,8 +80,7 @@ function updateFieldData(fieldData){
 }
 
 function restartGame() {
-    socket.send('{"forward":"' + gameID + '",cmd":"reset"}');
-    document.getElementById('reset').disabled = true;
+    socket.send('{"forward":"' + gameID + '","cmd":"reset"}');
 }
 
 function IsJsonString(str) {

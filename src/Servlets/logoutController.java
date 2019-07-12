@@ -13,13 +13,13 @@ public class logoutController extends HttpServlet
     private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         //Wenn ein angemeldeter Nutzer in der Session existiert -> löschen
-        if(request.getSession(false) != null)
-        {
-            if(request.getSession().getAttribute("user") != null)
+        if(request.getSession(false) != null) {
+            if (request.getSession().getAttribute("user") != null) {
                 request.getSession().removeAttribute("user");
-        }
+            }
 
-        response.getWriter().write("logout");
+            response.sendRedirect("/");
+        }
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGetOrPost(request, response);

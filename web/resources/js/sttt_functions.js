@@ -31,7 +31,7 @@ socket.onmessage = function (ev)
             switch(obj.cmd)
             {
                 case 'field':
-                    updateFieldData(obj.fieldData,obj.currentfield);
+                    updateFieldData(obj.fieldData,obj.currentfield,obj.bigFieldData);
                     break;
                 case 'infoMsg':
                     document.getElementById('msgBox').innerHTML  = obj.content;
@@ -56,32 +56,59 @@ function fieldClick(fieldNum) {
     socket.send('{"forward":"' + gameID + '","cmd":"click","fieldNum":'+fieldNum+'}');
 }
 
-function updateFieldData(fieldData,currentfield){
-    for(var i = 0; i < 81; i++)
-    {
-        if(fieldData[i] === 1)
-        {
-            //document.getElementById('field' + (i+1)).style.background = "url('/resources/img/ttt_circle.png')";
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'red';
+function updateFieldData(fieldData,currentfield,bigFieldData){
+
+    for(var i = 0; i < 81; i++) {
+        if (fieldData[i] === 1) {
+            document.getElementById('field' + (i)).style.background = 'red';
+        } else if (fieldData[i] === 2) {
+            document.getElementById('field' + (i)).style.background = 'green';
+        } else {
+            document.getElementById('field' + (i)).style.background = 'white';
         }
-        else if(fieldData[i] === 2)
+    }
+
+    for(var bi = 0; bi < 9; bi++)
+    {
+        var x = parseInt(bi)%3;
+        var y = parseInt(bi/3);
+
+        var elements;
+        var disabled = false;
+
+        if(bigFieldData[bi] === 1)
         {
-        	//document.getElementById('field' + (i+1)).style.background = "url('/resources/img/ttt_cross.png')";
-            document.getElementById('field' + (i+1)).style.backgroundColor = 'green';
+            document.getElementById('subTable_' + y + '_' + x).style.background = 'red';
+            disabled = true;
+        }
+        else if(bigFieldData[bi] === 2)
+        {
+            document.getElementById('subTable_' + y + '_' + x).style.background = 'green';
+            disabled = true;
         }
         else
         {
-            var field = parseInt((i/9)+1);
-
-        	if(field === currentfield) document.getElementById('field' + (i+1)).style.backgroundColor = 'yellow';//document.getElementById('field' + (i+1)).style.background = "none";
-            else document.getElementById('field' + (i+1)).style.backgroundColor = 'white';
+            if(bi === currentfield)
+            {
+                document.getElementById('subTable_' + y + '_' + x).style.background = 'yellow';
+                disabled = false;
+            }
+            else
+            {
+                document.getElementById('subTable_' + y + '_' + x).style.background = 'white';
+                disabled = true;
+            }
         }
 
+        elements = document.getElementsByClassName('buttonGroup_' + y + '_' + x);
+        for (var e = 0; e < elements.length; e++) {
+            elements[e].disabled = disabled;
+        }
     }
 }
 
 function restartGame() {
-    socket.send('{"forward":"' + gameID + '",cmd":"reset"}');
+    socket.send('{"forward":"' + gameID + '","cmd":"reset"}');
 }
 
 function IsJsonString(str) {

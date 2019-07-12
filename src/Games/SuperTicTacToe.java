@@ -40,7 +40,7 @@ public class SuperTicTacToe extends Game{
     @Override
     public Boolean addPlayer(final Session playerSession)
     {
-        String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("sessionID")).getId();
+        String httpSessionID = ((HttpSession)playerSession.getUserProperties().get("session")).getId();
 
         if(gamestate != Gamestate.WAITING_FOR_PLAYER || isPlayerInGame(httpSessionID)) return false;
 
@@ -142,14 +142,24 @@ public class SuperTicTacToe extends Game{
                     fieldClick(obj.getInt("fieldNum"), sender);
                     break;
                 case "reset":
-                    if(getPlayerAmount() == 2) {
-                        if(currentPlayer != null) setCurrentPlayer(currentPlayer);
+                    if(getPlayerAmount() == 2 && gamestate == Gamestate.PAUSED)
+                    {
+                        if(currentPlayer != null)
+                        {
+                            if(currentPlayer.equals(playerOne)) setCurrentPlayer(playerTwo);
+                            else setCurrentPlayer(playerOne);
+                        }
                         else setCurrentPlayer(playerOne);
 
                         for(int i=0; i<=8; i++)
                         {
                             this.fields[i] = new LittleField();
                         }
+
+                        currentField = fields[0];
+
+                        playerOne.sendMessage("{\"cmd\":\"disableReset\"}");
+                        playerTwo.sendMessage("{\"cmd\":\"disableReset\"}");
 
                         updateUserField();
                         gamestate = Gamestate.RUNNING;
@@ -230,6 +240,7 @@ public class SuperTicTacToe extends Game{
         json.put("cmd", "field");
         json.put("fieldData", getCompleteFieldArray());
         json.put("currentfield", getCurrentField());
+        json.put("bigFieldData", getBigFieldFieldArray());
 
         if(playerOne != null) playerOne.sendMessage(json.toString());
         if(playerTwo != null) playerTwo.sendMessage(json.toString());
@@ -265,6 +276,7 @@ public class SuperTicTacToe extends Game{
                                     playerOne.sendInfoMessage("Unentschieden!");
                                     playerTwo.sendInfoMessage("Unentschieden!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
                                     gamestate = Gamestate.PAUSED;
                                     return;
                                 case 0:
@@ -275,12 +287,14 @@ public class SuperTicTacToe extends Game{
                                     playerOne.sendInfoMessage("Du hast gewonnen!");
                                     playerTwo.sendInfoMessage("Du hast verloren!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
                                     gamestate = Gamestate.PAUSED;
                                     return;
                                 case 2:
                                     playerTwo.sendInfoMessage("Du hast gewonnen!");
                                     playerOne.sendInfoMessage("Du hast verloren!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+                                    playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
                                     gamestate = Gamestate.PAUSED;
                                     return;
                             }
@@ -303,6 +317,14 @@ public class SuperTicTacToe extends Game{
         int[] result = new int[81];
         for(int i=0; i<=80; i++) {
             result[i] = fields[(i/9)].getFieldArray()[(i % 9)];
+        }
+        return result;
+    }
+
+    private int[] getBigFieldFieldArray() {
+        int[] result = new int[9];
+        for(int i=0; i<9; i++) {
+            result[i] = getLittleFieldResult(i);
         }
         return result;
     }
@@ -358,6 +380,15 @@ public class SuperTicTacToe extends Game{
         if((getLittleFieldResult(2) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(6) == 2)) {
             return 2;
         }
+
+        int emptyFields = 0;
+        for(int f = 0; f < 9; f++)
+        {
+            if(getLittleFieldResult(f) == 0) emptyFields++;
+        }
+
+        if(emptyFields == 0) return -1;
+
         return 0;
     }
 
@@ -379,10 +410,10 @@ public class SuperTicTacToe extends Game{
 
         boolean success = false;
 
-        if(this.playerOne.equals(this.currentPlayer) && number>0 && number<=9) {
+        if(this.playerOne.equals(this.currentPlayer) && number>=0 && number<9) {
             this.currentField.getTile(number).setPlayer(1);
             success = true;
-        }else if(this.playerTwo.equals(this.currentPlayer) && number>0 && number<=9) {
+        }else if(this.playerTwo.equals(this.currentPlayer) && number>=0 && number<9) {
             this.currentField.getTile(number).setPlayer(2);
             success = true;
         }

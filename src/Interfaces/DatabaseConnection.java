@@ -1,21 +1,17 @@
 package Interfaces;
 
 import java.sql.*;
-import beans.UserBean;
 
 public class DatabaseConnection
 {
     private static Connection conn = null;
     private static boolean connectionReady;
 
-    public DatabaseConnection(String databaseName,String user, String passwd) {
-        connectionReady = openConnection(databaseName,user, passwd);
-    }
-
     private static boolean openConnection(String databaseName,String user, String passwd) {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/"+databaseName, user, passwd);
+            connectionReady = true;
             return true;
         } catch (SQLException se) {
             se.printStackTrace();
@@ -23,6 +19,7 @@ public class DatabaseConnection
             e.printStackTrace();
         }
 
+        connectionReady = false;
         return false;
     }
 
@@ -39,34 +36,17 @@ public class DatabaseConnection
         }
     }
 
-    public ResultSet executeQuery(String query) {
-        if(conn == null)
-        {
-            System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
-            return null;
-        }
-
-        Statement stmt = null;
-
-        try {
-            stmt = conn.createStatement();
-            return stmt.executeQuery(query);
-        } catch (SQLException e ) {
-            e.printStackTrace();
-        } finally {
-            if (stmt != null)
-            {
-                try{ stmt.close();} catch (SQLException e ) { e.printStackTrace();}
-            }
-        }
-
-        return null;
-    }
-
     public static boolean isReady() {return connectionReady; }
 
     public static boolean validateUser(String nickname, String password) {
-        if(!connectionReady && conn != null) return false;
+        if(!connectionReady)
+        {
+            if(!openConnection("TeamTacToe","tomcat","tomcat"))
+            {
+                System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
+                return false;
+            }
+        }
 
         boolean isValid = false;
 
@@ -87,7 +67,14 @@ public class DatabaseConnection
     }
 
     public static boolean insertNewUser(String nickname, String password) {
-        if(!connectionReady && conn != null) return false;
+        if(!connectionReady)
+        {
+            if(!openConnection("TeamTacToe","tomcat","tomcat"))
+            {
+                System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
+                return false;
+            }
+        }
 
         if(userExists(nickname)) return false;
 
@@ -104,7 +91,14 @@ public class DatabaseConnection
     }
 
     public static Boolean userExists(String nickname) {
-        if(!connectionReady && conn != null) return false;
+        if(!connectionReady)
+        {
+            if(!openConnection("TeamTacToe","tomcat","tomcat"))
+            {
+                System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
+                return false;
+            }
+        }
 
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT nickname FROM user WHERE nickname=?;");
