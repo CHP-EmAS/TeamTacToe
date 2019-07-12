@@ -51,9 +51,14 @@ public class Player {
     }
 
     public String getPlayerName() {
-        if(user != null) return user.getNickname();
-        else if(httpSessionID.equals("NULL_SESSION")) return "Error Player";
-        else return "Gast";
+        if(user != null) {
+            if (user.getLoggedIn())
+                return user.getNickname();
+        }
+        else if(httpSessionID.equals("NULL_SESSION"))
+            return "Error Player";
+
+        return "Gast";
     }
 
     public Boolean isRegisteredPlayer() {

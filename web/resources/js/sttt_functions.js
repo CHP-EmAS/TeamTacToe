@@ -86,6 +86,11 @@ function updateFieldData(fieldData,currentfield,bigFieldData){
             document.getElementById('subTable_' + y + '_' + x).style.background = 'green';
             disabled = true;
         }
+        else if(bigFieldData[bi] === -1)
+        {
+            document.getElementById('subTable_' + y + '_' + x).style.background = 'grey';
+            disabled = true;
+        }
         else
         {
             if(bi === currentfield)

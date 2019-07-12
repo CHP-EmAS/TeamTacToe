@@ -32,9 +32,7 @@ public class UserBean
                 System.out.println("UserBean: User " + nickname + " logged in successfully!");
             } else alert = "Benutzername oder Passwort falsch!";
         } else {
-            System.out.println("mhh " + alert);
             alert = "Login momentan nicht moeglich! :(";
-            System.out.println("mhh2 " + alert);
             System.out.println("UserBean: Failed to validate User <" + nickname + ">! ERROR: No connection to Database!");
         }
     }
@@ -63,11 +61,10 @@ public class UserBean
     public boolean getLoggedIn() { return loggedIn; }
 
     public String getAlert() {
-        System.out.println("Info: " + alert);
         String temp = alert;
         alert = "";
         return temp;
     }
-    public String getNickname() { System.out.println("lolololol"); return nickname;}
+    public String getNickname() { return nickname;}
     public int getScore() { return score; }
 }

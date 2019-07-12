@@ -1,5 +1,8 @@
 package Interfaces;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.sql.*;
 
 public class DatabaseConnection
@@ -111,5 +114,52 @@ public class DatabaseConnection
         } catch (SQLException e) {e.printStackTrace();}
 
         return false;
+    }
+
+    public static JSONObject getBestPlayers(int limit) {
+        JSONObject userList = new JSONObject();
+
+        if(!connectionReady)
+        {
+            if(!openConnection("TeamTacToe","tomcat","tomcat"))
+            {
+                System.out.println("DatabaseConnection: Can't execute Query! ERROR: No Connection.");
+                return userList;
+            }
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT nickname,score FROM user ORDER BY score DESC LIMIT ?");
+            stmt.setInt(1, limit);
+
+            ResultSet rs = stmt.executeQuery();
+
+            Integer place = 1;
+            int lastScore = -1;
+
+            JSONArray jArray = new JSONArray();
+
+            while(rs.next())
+            {
+                JSONObject user = new JSONObject();
+
+                if(rs.getInt("score") == lastScore) place--;
+
+                lastScore = rs.getInt("score");
+
+                user.put("placment",place);
+                user.put("nickname",rs.getString("nickname"));
+                user.put("score",rs.getInt("score"));
+
+                jArray.put(user);
+
+                place++;
+            }
+
+            userList.put("list", jArray);
+
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return userList;
     }
 }
