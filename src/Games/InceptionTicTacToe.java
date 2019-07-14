@@ -57,11 +57,11 @@ public class InceptionTicTacToe extends Game{
 					if(result==1 || result==2) {
 						for(int j=0; j<=8; j++) {
 							if(player.equals(playerOne)) {
-								fieldArray[field].getTile(j).setPlayer(1);
+								fieldArray[field%9].getTile(j).setPlayer(1);
 								currentPlayer = playerOne;
 							}
 							if(player.equals(playerTwo)) {
-								fieldArray[field].getTile(j).setPlayer(2);
+								fieldArray[field%9].getTile(j).setPlayer(2);
 								currentPlayer = playerTwo;
 							}
 						}
@@ -96,11 +96,11 @@ public class InceptionTicTacToe extends Game{
 							if(result==1 || result==2) {
 								for(int k=0; k<=8; k++) {
 									if(result==1) {
-										fieldArray[field].getTile(k).setPlayer(1);
+										fieldArray[field/9].getTile(k).setPlayer(1);
 										currentPlayer = playerOne;
 									}
 									if(result==2) {
-										fieldArray[field].getTile(k).setPlayer(2);
+										fieldArray[field/9].getTile(k).setPlayer(2);
 										currentPlayer = playerTwo;
 									}
 								}
@@ -148,9 +148,9 @@ public class InceptionTicTacToe extends Game{
 	}
 	
 	private void setTile(int number) {
-		if(this.playerOne.equals(this.currentPlayer) && number>0 && number<=9) {
+		if(this.playerOne.equals(this.currentPlayer) && number>=0 && number<9) {
 			this.currentField.getTile(number).setPlayer(1);
-		}else if(this.playerTwo.equals(this.currentPlayer) && number>0 && number<=9) {
+		}else if(this.playerTwo.equals(this.currentPlayer) && number=>0 && number<9) {
 			this.currentField.getTile(number).setPlayer(2);
 		}
 	}
