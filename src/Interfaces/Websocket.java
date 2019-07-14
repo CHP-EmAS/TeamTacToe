@@ -186,8 +186,10 @@ public class Websocket {
             case Super_TicTacToe:
                 newGame  = new SuperTicTacToe(newGameID);
                 break;
-            case Fancy_TicTacToe:
             case Inception_TicTacToe:
+                newGame  = new InceptionTicTacToe(newGameID);
+                break;
+            case Fancy_TicTacToe:
             default:
                 System.out.println("Websocket: ERROR: Unknown Gametype <" + gameType.toString() + ">!");
                 return "";

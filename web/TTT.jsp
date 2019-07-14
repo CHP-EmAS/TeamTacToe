@@ -39,11 +39,11 @@
         <h1>Tic Tac Toe</h1>
     </div>
     <div id="d2">
-        <button class="fieldButton" id="field1" onclick="fieldClick(1)"></button><button class="fieldButton" id="field2" onclick="fieldClick(2)"></button><button class="fieldButton" id="field3" onclick="fieldClick(3)"></button>
+        <button class="fieldButton" id="field0" onclick="fieldClick(0)"></button><button class="fieldButton" id="field1" onclick="fieldClick(1)"></button><button class="fieldButton" id="field2" onclick="fieldClick(2)"></button>
         <br>
-        <button class="fieldButton" id="field4" onclick="fieldClick(4)"></button><button class="fieldButton" id="field5" onclick="fieldClick(5)"></button><button class="fieldButton" id="field6" onclick="fieldClick(6)"></button>
+        <button class="fieldButton" id="field3" onclick="fieldClick(3)"></button><button class="fieldButton" id="field4" onclick="fieldClick(4)"></button><button class="fieldButton" id="field5" onclick="fieldClick(5)"></button>
         <br>
-        <button class="fieldButton" id="field7" onclick="fieldClick(7)"></button><button class="fieldButton" id="field8" onclick="fieldClick(8)"></button><button class="fieldButton" id="field9" onclick="fieldClick(9)"></button>
+        <button class="fieldButton" id="field6" onclick="fieldClick(6)"></button><button class="fieldButton" id="field7" onclick="fieldClick(7)"></button><button class="fieldButton" id="field8" onclick="fieldClick(8)"></button>
         <h1 id="msgBox"></h1>
         <button id="reset" disabled onclick="restartGame()">Nochmal!</button>
     </div>

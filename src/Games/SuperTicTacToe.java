@@ -28,11 +28,7 @@ public class SuperTicTacToe extends Game{
         gamestate = Gamestate.WAITING_FOR_PLAYER;
 
         this.fields = new LittleField[9];
-
-        for(int i=0; i<=8; i++)
-        {
-            this.fields[i] = new LittleField();
-        }
+        for(int i = 0; i<9; i++) fields[i] = new LittleField();
 
         this.currentField = fields[0];
     }
