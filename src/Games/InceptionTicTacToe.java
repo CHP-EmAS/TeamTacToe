@@ -51,9 +51,8 @@ public class InceptionTicTacToe extends Game{
 				switchCurrentPlayer(player);
 				int result = getCompleteResult();
 				if(result!=0) {
-					for(int i=0; i<=8; i++) {
-						currentField.getTile(i).setPlayer(0);
-					}
+					currentField.reset();
+					
 					if(result==1 || result==2) {
 						for(int j=0; j<=8; j++) {
 							if(player.equals(playerOne)) {
@@ -89,9 +88,7 @@ public class InceptionTicTacToe extends Game{
 					}else {
 						if(counter!=rounds) {
 							for(int i=0; i<=8; i++) {
-								for(int j=0; j<=8; j++) {
-									fieldArray[i].getTile(j).setPlayer(0);
-								}
+								fieldArray[i].reset();
 							}
 							if(result==1 || result==2) {
 								for(int k=0; k<=8; k++) {
