@@ -35,6 +35,8 @@ public class InceptionTicTacToe extends Game{
 			fieldArray[i] = new LittleField();
 		}
 		currentField = fieldArray[0];
+		currentGameType = GameType.TicTacToe;
+		
 		counter = 0;
 		this.rounds = rounds;
 		wonByPlayerOne = 0;
@@ -129,7 +131,7 @@ public class InceptionTicTacToe extends Game{
 	}
 	
 	/**
-	 * Setzt nächstes currentField
+	 * Setzt nÃ¤chstes currentField
 	 * @param number Feld das zuletzt gesetzt wurde (0-8)
 	 */
 	private void setNextField(int number) {
@@ -361,14 +363,14 @@ public class InceptionTicTacToe extends Game{
 					}
 				}
 			}
-			//Diagonale oben links nach unten rechts prüfen
+			//Diagonale oben links nach unten rechts prÃ¼fen
 			if((getLittleFieldResult(0) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(8) == 1)) {
 				return 1;
 			}
 			if((getLittleFieldResult(0) == 2)&&(getLittleFieldResult(4) == 2)&&(getLittleFieldResult(8) == 2)) {
 				return 2;
 			}
-			//Diagonale oben rechts nach unten links prüfen
+			//Diagonale oben rechts nach unten links prÃ¼fen
 			if((getLittleFieldResult(2) == 1)&&(getLittleFieldResult(4) == 1)&&(getLittleFieldResult(6) == 1)) {
 				return 1;
 			}
@@ -392,7 +394,7 @@ public class InceptionTicTacToe extends Game{
 	}
 	
 	/**
-	 * Nach jeder Spielrunde wird der counter um 1 nach oben gezählt.
+	 * Nach jeder Spielrunde wird der counter um 1 nach oben gezÃ¤hlt.
 	 * Wenn counter == rounds wird das Gesamtergebnis bestimmt.
 	 * @return Spielergebnis
 	 */
@@ -460,7 +462,7 @@ public class InceptionTicTacToe extends Game{
 		return GameType.Inception_TicTacToe;
 	}
 	/**
-	 * Gibt Spieltyp des aktuellen Spielfeldes zurück (Normal oder Super)
+	 * Gibt Spieltyp des aktuellen Spielfeldes zurÃ¼ck (Normal oder Super)
 	 * @return currentGameType of field
 	 */
 	public GameType getGameTypeOfField() {
