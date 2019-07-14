@@ -261,7 +261,7 @@ public class InceptionTicTacToe extends Game{
 		else
 			System.out.println("ERROR: Spieler noch nicht initialisiert!");
 	}
-	
+
 	/**
 	 * Setzt n�chstes currentField
 	 * @param number Feld das zuletzt gesetzt wurde (0-8)
@@ -288,10 +288,7 @@ public class InceptionTicTacToe extends Game{
 
 		if(playerOne == null){
 			playerOne = new Player(playerSession);
-			if(playerTwo == null){
-				playerOne.sendMessage("{\"cmd\":\"roundPromt\"}");
-				playerOne.sendInfoMessage("Warte auf Mitspieler!");
-			}
+			if(playerTwo == null) playerOne.sendInfoMessage("Warte auf Mitspieler!");
 		}
 		else if(playerTwo == null)
 		{
