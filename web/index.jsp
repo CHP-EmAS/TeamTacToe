@@ -75,7 +75,7 @@
 			<br>
 			<button onclick="joinGame()">Join Game</button>
 			<br>
-			<button>Leaderboard</button>
+			<button onClick="window.location='leaderboard.jsp'">Leaderboard</button>
 			<br>
 			<button>About</button>
 		</div>

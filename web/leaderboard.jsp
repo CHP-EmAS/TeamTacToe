@@ -9,6 +9,9 @@
 	<meta charset="ISO-8859-1">
 	<title>Leaderboard</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+	<style>
+		<%@ include file="/css/main.css" %>
+	</style>
 </head>
 <body>
 <div id="container">
