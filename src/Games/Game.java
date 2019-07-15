@@ -108,6 +108,8 @@ public class Game
 
     public Player getPlayer(String httpSessionID) { return errorPlayer; }
 
+    public GameType getGameType() { return this.gametype; }
+
     public static GameType getGameType(String shortcut) {
         switch (shortcut) {
             case "TTT":

@@ -1,4 +1,3 @@
-
 var pathSplit = window.location.pathname.split("/");
 var gameID = pathSplit[pathSplit.length-1];
 
@@ -17,6 +16,14 @@ socket.onclose = function ()
 {
     console.log('Verbindung getrennt!');
 };
+
+function fieldClick(fieldNum) {
+    socket.send('{"forward":"' + gameID + '","cmd":"click","fieldNum":'+fieldNum+'}');
+}
+
+function restartGame() {
+    socket.send('{"forward":"' + gameID + '","cmd":"reset"}');
+}
 
 socket.onmessage = function (ev)
 {
@@ -53,10 +60,6 @@ socket.onmessage = function (ev)
     }
 };
 
-function fieldClick(fieldNum) {
-    socket.send('{"forward":"' + gameID + '","cmd":"click","fieldNum":'+fieldNum+'}');
-}
-
 function updateFieldData(fieldData){
     for(var i = 0; i < 9; i++)
     {
@@ -77,10 +80,6 @@ function updateFieldData(fieldData){
         }
 
     }
-}
-
-function restartGame() {
-    socket.send('{"forward":"' + gameID + '","cmd":"reset"}');
 }
 
 function IsJsonString(str) {

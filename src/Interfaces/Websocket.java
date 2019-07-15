@@ -61,7 +61,7 @@ public class Websocket {
         {
             String gameID = obj.getString("forward");
 
-            if(gameSessions.containsKey(gameID))
+            if(gameExists(gameID))
             {
                 if(getGameByID(gameID).isPlayerInGame(httpSessionID)) getGameByID(gameID).receiveMessage(message, httpSessionID);
                 else closeClient(session,"Cannot forward Message to Game <" + obj.getString("forward") + ">. Game does not contains SessionID!");
@@ -77,7 +77,7 @@ public class Websocket {
                 {
                     case "connect":
                         if(obj.has("gameID")) {
-                            if(gameSessions.containsKey(obj.getString("gameID"))) {
+                            if(gameExists(obj.getString("gameID"))) {
                                 if(!getGameByID(obj.getString("gameID")).isPlayerInGame(httpSessionID)) {
                                     if(!getGameByID(obj.getString("gameID")).addPlayer(session))
                                         closeClient(session, "Unable to add to Game <" + obj.getString("gameID") + ">");
@@ -108,7 +108,7 @@ public class Websocket {
         String gameID = "";
         if(session.getRequestParameterMap().containsKey("gameID")) gameID = session.getRequestParameterMap().get("gameID").get(0);
 
-        if(gameSessions.containsKey(gameID)) {
+        if(gameExists(gameID)) {
             if(getGameByID(gameID).isPlayerInGame(httpSessionID)) {
                 if(getGameByID(gameID).getPlayer(httpSessionID).getSession().getId().equals(session.getId())) {
                     if(getGameByID(gameID).removePlayer(httpSessionID)) {
@@ -120,6 +120,60 @@ public class Websocket {
                 }else System.out.println("Websocket: Socket <" + httpSessionID + "> lost connection! Same HttpSessionID as Player in Game <" + gameID + ">, but SocketID doesn't match!");
             }else System.out.println("Websocket: ERROR: Socket <" + httpSessionID + "> lost connection, but doesn't exist in Game <" + gameID + ">!");
         }else System.out.println("Websocket: Socket <" + httpSessionID + "> lost connection!");
+    }
+
+    static public String createGame(Game.GameType gameType) {
+        if(gameSessions.size() >= MAX_GAME_AMOUNT) return "";
+
+        String newGameID;
+
+        //Zeichen die GameID enthalten darf
+        final String alpha_string_numeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        //GameID generieren
+        do {
+            StringBuilder builder = new StringBuilder();
+            int count = GAME_ID_LENGTH;
+
+            while (count-- != 0) {
+                int character = (int) (Math.random() * alpha_string_numeric.length());
+                builder.append(alpha_string_numeric.charAt(character));
+            }
+
+            newGameID = builder.toString();
+        }
+        while(gameExists(newGameID));
+
+        Game newGame;
+
+        switch(gameType) {
+            case TicTacToe:
+                newGame  = new TicTacToe(newGameID);
+                break;
+            case Super_TicTacToe:
+                newGame  = new SuperTicTacToe(newGameID);
+                break;
+            case Inception_TicTacToe:
+                newGame  = new InceptionTicTacToe(newGameID);
+                break;
+            case Fancy_TicTacToe:
+            default:
+                System.out.println("Websocket: ERROR: Unknown Gametype <" + gameType.toString() + ">!");
+                return "";
+        }
+
+        gameSessions.put(newGameID,newGame);
+
+        System.out.println("Websocket: New Game of " + gameType + " <" + newGameID + "> was sucessfully created!");
+        return newGameID;
+    }
+
+    static public Boolean gameExists(String gameID) { return gameSessions.containsKey(gameID); }
+
+    static public Game.GameType getGameType(String gameID) {
+        if(gameExists(gameID)) return getGameByID(gameID).getGameType();
+
+        return Game.GameType.NONE;
     }
 
     /**
@@ -155,59 +209,13 @@ public class Websocket {
         closeClient(session);
     }
 
-    static public String createGame(Game.GameType gameType) {
-        if(gameSessions.size() >= MAX_GAME_AMOUNT) return "";
-
-        String newGameID;
-
-        //Zeichen die GameID enthalten darf
-        final String alpha_string_numeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-        //GameID generieren
-        do {
-            StringBuilder builder = new StringBuilder();
-            int count = GAME_ID_LENGTH;
-
-            while (count-- != 0) {
-                int character = (int) (Math.random() * alpha_string_numeric.length());
-                builder.append(alpha_string_numeric.charAt(character));
-            }
-
-            newGameID = builder.toString();
-        }
-        while(gameSessions.containsKey(newGameID));
-
-        Game newGame;
-
-        switch(gameType) {
-            case TicTacToe:
-                newGame  = new TicTacToe(newGameID);
-                break;
-            case Super_TicTacToe:
-                newGame  = new SuperTicTacToe(newGameID);
-                break;
-            case Inception_TicTacToe:
-                newGame  = new InceptionTicTacToe(newGameID);
-                break;
-            case Fancy_TicTacToe:
-            default:
-                System.out.println("Websocket: ERROR: Unknown Gametype <" + gameType.toString() + ">!");
-                return "";
-        }
-
-        gameSessions.put(newGameID,newGame);
-
-        System.out.println("Websocket: New Game of " + gameType + " <" + newGameID + "> was sucessfully created!");
-        return newGameID;
-    }
-
     /**
      * getGameID gibt ein Spielobject zu einer bestimmten GameID wieder.
      * @param gameID Die ID des Spiel.
      * @return Das Spielobjekt mit der gesuchten ID. Falls das Spielobjekt nicht existiert, wird das errorGame-Objekt zurückgegeben.
      */
     static private Game getGameByID(String gameID) {
-        if(gameSessions.containsKey(gameID))
+        if(gameExists(gameID))
             return gameSessions.get(gameID);
         else {
             System.out.println("Websocket: ERROR: A GameSession with Key:" + gameID + " does not exist!");
@@ -220,7 +228,7 @@ public class Websocket {
      * @param gameID Die ID des Spielobjektes welches gelöscht werden soll.
      */
     static private void deleteGameByID(String gameID) {
-        if(gameSessions.containsKey(gameID))
+        if(gameExists(gameID))
         {
             Game game = gameSessions.get(gameID);
 

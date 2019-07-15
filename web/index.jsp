@@ -9,38 +9,7 @@
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 	<script type="text/javascript" src="resources/js/sha512.js"></script>
-	<script>
-		function hashSubmit()
-		{
-			document.getElementById('pw').value = hex_sha512(document.getElementById('nopassword').value);
-			document.getElementById('nopassword').value = "#";
-			return true;
-		}
-
-		function createGame(gametype)
-		{
-			var req = new XMLHttpRequest();
-			req.open('GET','/createGame?gameType='+gametype, true);
-
-			req.onreadystatechange = function receive() {
-				if(req.readyState === 4){
-					window.location = req.responseText;
-				}
-			};
-
-			req.send();
-		}
-
-		function joinGame()
-		{
-			var gameID = prompt("Bitte Spiel ID eingeben:", "");
-
-			if (gameID != null || gameID != "")
-			{
-				socket.send('{"forward":"' + gameID + '","cmd":"setRounds","amount":'+rounds+'}');
-			}
-		}
-	</script>
+	<script src="/resources/js/home.js?6"></script>
 	<style>
 		<%@ include file="/css/main.css" %>
 	</style>
@@ -104,7 +73,7 @@
 			<br>
 			<button>Fancy Tic Tac Toe</button>
 			<br>
-			<button>Join Game</button>
+			<button onclick="joinGame()">Join Game</button>
 			<br>
 			<button>Leaderboard</button>
 			<br>
