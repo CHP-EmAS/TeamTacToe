@@ -66,9 +66,7 @@ public class registerController extends HttpServlet
                 return;
             }
 
-            userBean.setPassword(password);
-
-            userBean.register();
+            userBean.register(password);
 
             if(userBean.getLoggedIn())
             {

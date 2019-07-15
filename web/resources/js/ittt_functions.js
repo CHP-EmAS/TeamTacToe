@@ -67,6 +67,12 @@ socket.onmessage = function (ev)
                 case 'alert':
                     alert(obj.msg);
                     break;
+                case 'changeToSmall':
+                    loadSmallField();
+                    break;
+                case 'changeToBig':
+                    loadBigField();
+                    break;
                 default:
                     console.log('Command "' + obj.cmd + '" is unknown');
                     break;
@@ -149,6 +155,74 @@ function updateBigFieldData(fieldData,currentfield,bigFieldData){
         }
     }
 }
+
+function loadBigField()
+{
+    var table = "<table id='bigBoy'>";
+    var y_big;
+    var x_big;
+    var c = 0;
+    for(y_big = 0; y_big < 3; y_big++) {
+        table += "<tr>"
+        for(x_big = 0; x_big < 3; x_big++) {
+            table += "<td><table class='subTable' id=subTable_" + y_big + "_" + x_big + ">"
+            var y, x;
+            for(y = 0; y < 3; y++) {
+                table += "<tr>";
+                for(x = 0; x < 3; x++) {
+                    table += "<td>";
+                    table += "<button class='fieldButton buttonGroup_"+ y_big + "_" + x_big + "' id='field" + c + "' onclick='fieldClick(" + c + ")'>";
+                    table += "</td>";
+                    c++;
+                }
+                table += "</tr>";
+            }
+            table += "</td></table>";
+        }
+        table += "</tr>";
+    }
+    table += "</table>";
+    table += "<h1 id='msgBox'></h1>";
+    table += "<button id='reset' disabled onclick='restartGame()'>Nochmal!</button>";
+    document.getElementById('d2').innerHTML = table;
+}
+
+function loadSmallField()
+{
+    var table = "<table id='bigBoy'>";
+    var y_big;
+    var x_big;
+    var c = 0;
+
+    table += "<tr>"
+    table += "<td><table class='subTable' id=subTable_" + 0 + "_" + 0 + ">"
+
+    var y, x;
+    for(y = 0; y < 3; y++)
+    {
+        table += "<tr>";
+        for(x = 0; x < 3; x++)
+        {
+            table += "<td>";
+            table += "<button class='fieldButton buttonGroup_"+ 0 + "_" + 0 + "' id='field" + c + "' onclick='fieldClick(" + c + ")'>";
+            table += "</td>";
+            c++;
+        }
+        table += "</tr>";
+    }
+
+    table += "</td></table>";
+    table += "</tr>";
+
+    table += "</table>";
+    table += "<h1 id='msgBox'></h1>";
+    table += "<button id='reset' disabled onclick='restartGame()'>Nochmal!</button>";
+    document.getElementById('d2').innerHTML = table;
+}
+
+window.onload = function(e){
+    loadSmallField();
+};
 
 function IsJsonString(str) {
     try {

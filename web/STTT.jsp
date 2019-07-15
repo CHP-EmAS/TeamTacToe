@@ -36,7 +36,7 @@
         }
 
     </style>
-    <script src="/resources/js/sttt_functions.js?$$REVISION$$"></script>
+    <script src="/resources/js/sttt_functions.js"></script>
 </head>
 <body>
 <div id="container">

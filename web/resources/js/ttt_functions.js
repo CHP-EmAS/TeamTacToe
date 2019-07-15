@@ -52,6 +52,9 @@ socket.onmessage = function (ev)
                     document.getElementById('reset').disabled = true;
                     document.getElementById('reset').visible = false;
                     break;
+                case 'alert':
+                    alert(obj.msg);
+                    break;
                 default:
                     console.log('Command "' + obj.cmd + '" is unknown');
                     break;

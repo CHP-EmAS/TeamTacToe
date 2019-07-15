@@ -116,6 +116,30 @@ public class DatabaseConnection
         return false;
     }
 
+    public static Boolean addPointsToUser(String nickname, int points) {
+        if(!connectionReady)
+        {
+            if(!openConnection("TeamTacToe","tomcat","tomcat"))
+            {
+                System.out.println("DatabaseConnection: Can't execute Update! ERROR: No Connection.");
+                return false;
+            }
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE user SET score = score+? WHERE nickname=?;");
+            stmt.setInt(1, points);
+            stmt.setString(2, nickname);
+
+            int changes = stmt.executeUpdate();
+
+            return (changes!=0);
+
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return false;
+    }
+
     public static JSONObject getBestPlayers(int limit) {
         JSONObject userList = new JSONObject();
 
@@ -161,5 +185,37 @@ public class DatabaseConnection
         } catch (SQLException e) {e.printStackTrace();}
 
         return userList;
+    }
+
+    public static JSONObject getPlayerInfo(String nickname) {
+        JSONObject user = new JSONObject();
+
+        if(!connectionReady)
+        {
+            if(!openConnection("TeamTacToe","tomcat","tomcat"))
+            {
+                System.out.println("DatabaseConnection: Can't execute Update! ERROR: No Connection.");
+                return user;
+            }
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT nickname,score FROM user WHERE nickname=?");
+            stmt.setString(1, nickname);
+
+            ResultSet rs = stmt.executeQuery();
+
+            Integer place = 1;
+
+            if(rs.next())
+            {
+                user.put("nickname",rs.getString("nickname"));
+                user.put("score",rs.getInt("score"));
+
+            }
+
+        } catch (SQLException e) {e.printStackTrace();}
+
+        return user;
     }
 }

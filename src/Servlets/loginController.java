@@ -40,9 +40,8 @@ public class loginController extends HttpServlet
             String passwd = request.getParameter("pw");
 
             userBean.setNickname(nickname);
-            userBean.setPassword(passwd);
 
-            userBean.validateLogin();
+            userBean.validateLogin(passwd);
 
             if(userBean.getLoggedIn())
             {

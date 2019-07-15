@@ -37,15 +37,10 @@
     }
     window.onload = initate;
 </script>
-<style>/*Registrationpage*/
-
-.input{
-    min-width: 200px;
-    min-height: 40px;
-    padding: 16px;
-    margin-left: px;
-    margin-top: 10px;
-}</style>
+<style>
+    <%@ include file="/css/main.css" %>
+    <%@ include file="/css/default.css" %>
+</style>
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">

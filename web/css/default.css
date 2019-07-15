@@ -1,0 +1,73 @@
+/*Homepage*/
+
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#container {
+    min-height: 100%;
+    min-width: 100%;
+}
+
+#d1 {
+    height: 80px;
+    padding: 16px;
+    padding-left: 40px;
+    border-bottom: 3px solid black;
+}
+
+#d2 {
+    padding: 16px;
+    padding-bottom: 28px;
+}
+
+#d3 {
+    width: 100%;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    height: 115px;
+    padding: 16px;
+    padding-left: 40px;
+    text-align: center;
+    border-top: 3px solid black;
+}
+
+#d2_1 {
+    display: inline-block;
+}
+
+#d2_2 {
+    width: 60%;
+    margin-left: 44px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.main_button {
+    min-width: 200px;
+    min-height: 40px;
+    padding: 16px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+
+.Footer_button {
+    min-width: 70px;
+    min-height: 20px;
+}
+
+/*Registrationpage*/
+
+.input{
+    min-width: 200px;
+    min-height: 40px;
+    padding: 16px;
+    margin-left: px;
+    margin-top: 10px;
+}

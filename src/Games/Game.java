@@ -2,7 +2,10 @@ package Games;
 
 import javax.websocket.Session;
 import Games.attachments.*;
-import java.util.HashMap;
+import Interfaces.Websocket;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Game Klasse - Parent-Objekt zu den jeweiligen Spieltypen
@@ -25,6 +28,7 @@ public class Game
         Super_TicTacToe("STTT"),
         Fancy_TicTacToe("FTTT"),
         Inception_TicTacToe("ITTT"),
+        ERROR("ERROR"),
         NONE("NONE");
 
         private final String shortcut;
@@ -45,10 +49,31 @@ public class Game
     protected Gamestate gamestate;
     protected final GameType gametype;
 
+    private Timer t_checkPlayer = new Timer();
+    private TimerTask checkTask = new TimerTask() {
+        int ticks = 0;
+
+        @Override
+        public void run() {
+            ticks++;
+
+            if(getPlayerAmount() == 0 || ticks >= 240)
+            {
+                System.out.println("GameTimer: Game <"+ gameID +", " + gametype + "> will be deleted, because the number of players in game is 0 or game exists since 2 hours!");
+                Websocket.deleteGameByID(gameID);
+
+                t_checkPlayer.cancel();
+                t_checkPlayer.purge();
+            }
+        }
+    };
+
     public Game(GameType type) {
         gameID = "";
         gametype = type;
         gamestate = Gamestate.CREATED;
+
+        if(gametype != GameType.ERROR && gametype != GameType.NONE) t_checkPlayer.scheduleAtFixedRate(checkTask,5*1000,30*1000);
     }
 
     /**
@@ -103,7 +128,9 @@ public class Game
      */
     public Boolean closeGame()
     {
-        return false;
+        t_checkPlayer.cancel();
+        t_checkPlayer.purge();
+        return true;
     }
 
     public Player getPlayer(String httpSessionID) { return errorPlayer; }
@@ -120,6 +147,8 @@ public class Game
                 return GameType.Fancy_TicTacToe;
             case "ITTT":
                 return GameType.Inception_TicTacToe;
+            case "ERROR":
+                return GameType.ERROR;
             default:
                 return GameType.NONE;
         }

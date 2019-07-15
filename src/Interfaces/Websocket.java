@@ -18,7 +18,7 @@ public class Websocket {
 
     private static HashMap<String, Game> gameSessions = new HashMap<>(); //Hashmap wird zum Speichern der Spielobjekte und dessen jeweilige GameID verwendet
 
-    private static Game errorGame = new Game(Game.GameType.NONE); //Rückgabewert für ein nicht gefundenes Game
+    private static Game errorGame = new Game(Game.GameType.ERROR); //Rückgabewert für ein nicht gefundenes Game
 
     /////////////////////****PUBLIC****/////////////////////
     /**
@@ -31,12 +31,11 @@ public class Websocket {
 
         HttpSession httpSession = (HttpSession) config.getUserProperties().get("session");
 
-        String nickname = "Null";
+        String nickname = "Gast";
         if(httpSession.getAttribute("user") != null)
         {
             UserBean user = (UserBean) httpSession.getAttribute("user");
             if(user.getLoggedIn()) nickname = user.getNickname();
-            else nickname="Gast";
         }
 
         System.out.println("Websocket: New Socket opened with SessionID: <" + httpSession.getId() + ">, Account: <" + nickname + ">.");
@@ -227,7 +226,7 @@ public class Websocket {
      * deleteGameByID löscht ein bestimmtes Spielobjekt aus der Hashmap.
      * @param gameID Die ID des Spielobjektes welches gelöscht werden soll.
      */
-    static private void deleteGameByID(String gameID) {
+    static public void deleteGameByID(String gameID) {
         if(gameExists(gameID))
         {
             Game game = gameSessions.get(gameID);

@@ -40,14 +40,28 @@ public class SuperTicTacToe extends Game{
 
         if(gamestate != Gamestate.WAITING_FOR_PLAYER || isPlayerInGame(httpSessionID)) return false;
 
+
+        String host = "";
+        if(playerSession.getRequestURI().getPort() != 80) host = playerSession.getRequestURI().getHost() + ":" + playerSession.getRequestURI().getPort();
+        else host = playerSession.getRequestURI().getHost();
+
+        String url = host + "/" + gametype.shortcut() + "/" + gameID;
+
         if(playerOne == null){
             playerOne = new Player(playerSession);
-            if(playerTwo == null) playerOne.sendInfoMessage("Warte auf Mitspieler!");
+            if(playerTwo == null) {
+                playerOne.sendInfoMessage("Warte auf Mitspieler!");
+                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+            }
         }
         else if(playerTwo == null)
         {
             playerTwo = new Player(playerSession);
-            if(playerOne == null) playerTwo.sendInfoMessage("Warte auf Mitspieler!");
+            if(playerOne == null)
+            {
+                playerTwo.sendInfoMessage("Warte auf Mitspieler!");
+                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+            }
         }
         else return false;
 
@@ -186,6 +200,8 @@ public class SuperTicTacToe extends Game{
             gameID = "";
             gamestate = Gamestate.CLOSED;
 
+            super.closeGame();
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -284,6 +300,9 @@ public class SuperTicTacToe extends Game{
                                     playerTwo.sendInfoMessage("Du hast verloren!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
                                     playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
+
+                                    if(playerOne.isRegisteredPlayer()) playerTwo.addPoints(3);
+
                                     gamestate = Gamestate.PAUSED;
                                     return;
                                 case 2:
@@ -291,6 +310,9 @@ public class SuperTicTacToe extends Game{
                                     playerOne.sendInfoMessage("Du hast verloren!");
                                     playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
                                     playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
+
+                                    if(playerTwo.isRegisteredPlayer()) playerTwo.addPoints(3);
+
                                     gamestate = Gamestate.PAUSED;
                                     return;
                             }

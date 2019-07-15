@@ -36,7 +36,7 @@
         }
 
     </style>
-    <script src="/resources/js/ittt_functions.js?12"></script>
+    <script src="/resources/js/ittt_functions.js?6"></script>
 </head>
 <body>
 <div id="container">
@@ -50,33 +50,4 @@
     </div>
 </div>
 </body>
-<script type="text/javascript">
-    var table = "<table id='bigBoy'>";
-    var y_big;
-    var x_big;
-    var c = 0;
-    for(y_big = 0; y_big < 3; y_big++) {
-        table += "<tr>"
-        for(x_big = 0; x_big < 3; x_big++) {
-            table += "<td><table class='subTable' id=subTable_" + y_big + "_" + x_big + ">"
-            var y, x;
-            for(y = 0; y < 3; y++) {
-                table += "<tr>";
-                for(x = 0; x < 3; x++) {
-                    table += "<td>";
-                    table += "<button class='fieldButton buttonGroup_"+ y_big + "_" + x_big + "' id='field" + c + "' onclick='fieldClick(" + c + ")'>";
-                    table += "</td>";
-                    c++;
-                }
-                table += "</tr>";
-            }
-            table += "</td></table>";
-        }
-        table += "</tr>";
-    }
-    table += "</table>";
-    table += "<h1 id='msgBox'></h1>";
-    table += "<button id='reset' disabled onclick='restartGame()'>Nochmal!</button>";
-    document.getElementById('d2').innerHTML = table;
-</script>
 </html>

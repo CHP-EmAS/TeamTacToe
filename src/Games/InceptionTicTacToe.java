@@ -15,9 +15,6 @@ public class InceptionTicTacToe extends Game{
 	private Player playerOne, playerTwo, currentPlayer;
 	private GameType currentGameType;
 
-	private int lastField;
-	private String lastWinner;
-
 	private int rounds;
 	private int counter;
 
@@ -67,10 +64,18 @@ public class InceptionTicTacToe extends Game{
 
 									switch (gameResult) {
 										case -1:
+											counter++;
+
+											if(counter >= rounds)
+											{
+												doEndResult();
+												break;
+											}
+
 											playerOne.sendMessage("{\"cmd\":\"changeToBig\"}");
 											playerTwo.sendMessage("{\"cmd\":\"changeToBig\"}");
-											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
-											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
+											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
+											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
 
 											if(player.equals(playerOne)) setCurrentPlayer(playerTwo);
 											else setCurrentPlayer(playerOne);
@@ -81,17 +86,25 @@ public class InceptionTicTacToe extends Game{
 											}
 
 											currentGameType = GameType.Super_TicTacToe;
-											counter++;
 											break;
 										case 0:
 											if(player.equals(playerOne)) setCurrentPlayer(playerTwo);
 											else setCurrentPlayer(playerOne);
 											break;
 										case 1:
+											counter++;
+											wonByPlayerOne++;
+
+											if(counter >= rounds)
+											{
+												doEndResult();
+												break;
+											}
+
 											playerOne.sendMessage("{\"cmd\":\"changeToBig\"}");
 											playerTwo.sendMessage("{\"cmd\":\"changeToBig\"}");
-											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
-											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
+											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
+											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
 
 											setCurrentPlayer(playerOne);
 
@@ -108,13 +121,21 @@ public class InceptionTicTacToe extends Game{
 											setNextField(wF);
 
 											currentGameType = GameType.Super_TicTacToe;
-											counter++;
 											break;
 										case 2:
+											counter++;
+											wonByPlayerTwo++;
+
+											if(counter >= rounds)
+											{
+												doEndResult();
+												break;
+											}
+
 											playerOne.sendMessage("{\"cmd\":\"changeToBig\"}");
 											playerTwo.sendMessage("{\"cmd\":\"changeToBig\"}");
-											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
-											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
+											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
+											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
 
 											setCurrentPlayer(playerTwo);
 
@@ -131,12 +152,8 @@ public class InceptionTicTacToe extends Game{
 											setNextField(wF2);
 
 											currentGameType = GameType.Super_TicTacToe;
-											counter++;
 											break;
 									}
-
-									if(gameResult == 1) wonByPlayerOne++;
-									else if(gameResult == 2) wonByPlayerTwo++;
 
 									updateUserField();
 
@@ -154,8 +171,16 @@ public class InceptionTicTacToe extends Game{
 									switch (gameResult)
 									{
 										case -1:
-											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
-											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
+											counter++;
+
+											if(counter >= rounds)
+											{
+												doEndResult();
+												break;
+											}
+
+											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
+											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
 
 											if(player.equals(playerOne)) setCurrentPlayer(playerTwo);
 											else setCurrentPlayer(playerOne);
@@ -167,7 +192,6 @@ public class InceptionTicTacToe extends Game{
 
 											setNextField(rnd.nextInt(9));
 
-											counter++;
 											break;
 										case 0:
 											if(player.equals(playerOne)) setCurrentPlayer(playerTwo);
@@ -176,8 +200,17 @@ public class InceptionTicTacToe extends Game{
 											setNextField(field%9);
 											break;
 										case 1:
-											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
-											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
+											counter++;
+											wonByPlayerOne++;
+
+											if(counter >= rounds)
+											{
+												doEndResult();
+												break;
+											}
+
+											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
+											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
 
 											setCurrentPlayer(playerOne);
 
@@ -200,12 +233,19 @@ public class InceptionTicTacToe extends Game{
                                             fieldArray[wF] = newField;
 
 											setNextField(wF);
-
-											counter++;
 											break;
 										case 2:
-											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
-											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+2) + ". Stufe!\"}");
+											counter++;
+											wonByPlayerTwo++;
+
+											if(counter >= rounds)
+											{
+												doEndResult();
+												break;
+											}
+
+											playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe! Du hast die vorherige Stufe gewonnen!\"}");
+											playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Ab in die " + (counter+1) + ". Stufe!\"}");
 
 											setCurrentPlayer(playerTwo);
 
@@ -228,8 +268,6 @@ public class InceptionTicTacToe extends Game{
                                             fieldArray[wF2] = newField2;
 
 											setNextField(wF2);
-
-											counter++;
 											break;
 									}
 
@@ -291,15 +329,27 @@ public class InceptionTicTacToe extends Game{
 
 		if(gamestate != Gamestate.WAITING_FOR_PLAYER || isPlayerInGame(httpSessionID)) return false;
 
+		String host = "";
+		if(playerSession.getRequestURI().getPort() != 80) host = playerSession.getRequestURI().getHost() + ":" + playerSession.getRequestURI().getPort();
+		else host = playerSession.getRequestURI().getHost();
+
+		String url = host + "/" + gametype.shortcut() + "/" + gameID;
+
 		if(playerOne == null){
 			playerOne = new Player(playerSession);
-			if(playerTwo == null) playerOne.sendInfoMessage("Warte auf Mitspieler!");
+			if(playerTwo == null)
+			{
+				playerOne.sendMessage("{\"cmd\":\"roundPromt\"}");
+				playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+				playerOne.sendInfoMessage("Warte auf Mitspieler!");
+			}
 		}
 		else if(playerTwo == null)
 		{
 			playerTwo = new Player(playerSession);
 			if (playerOne == null) {
 				playerTwo.sendMessage("{\"cmd\":\"roundPromt\"}");
+				playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
 				playerTwo.sendInfoMessage("Warte auf Mitspieler!");
 			}
 		}
@@ -307,14 +357,18 @@ public class InceptionTicTacToe extends Game{
 
 		if(getPlayerAmount() == 2)
 		{
+			playerOne.sendMessage("{\"cmd\":\"changeToSmall\"}");
+			playerTwo.sendMessage("{\"cmd\":\"changeToSmall\"}");
+
 			if(currentPlayer == null)
 			{
 				Random generator = new Random();
 				if(generator.nextInt(2) == 1) setCurrentPlayer(playerOne);
 				else setCurrentPlayer(playerTwo);
 			}
-			
+
 			updateUserField();
+
 			gamestate = Gamestate.RUNNING;
 		}
 
@@ -398,18 +452,31 @@ public class InceptionTicTacToe extends Game{
 					}
 					break;
 				case "reset":
-					if(getPlayerAmount() == 2) {
-						if(currentPlayer != null) {}
+					if(getPlayerAmount() == 2 && gamestate == Gamestate.PAUSED)
+					{
+						playerOne.sendMessage("{\"cmd\":\"changeToSmall\"}");
+						playerTwo.sendMessage("{\"cmd\":\"changeToSmall\"}");
+
+						if(currentPlayer != null)
+						{
+							if(currentPlayer.equals(playerOne)) setCurrentPlayer(playerTwo);
+							else setCurrentPlayer(playerOne);
+						}
 						else currentPlayer = playerOne;
 						
-						//Spiel wird resettet, Rundenanzahl auf 0 gesetzt und neue Startrunnde initialisiert
+
 						counter = 0;
 						currentGameType = GameType.TicTacToe;
-						for(int i=0; i<=8; i++) {
-							for(int j=0; j<=8; j++) {
-								fieldArray[i].getTile(j).setPlayer(0);
-							}
+
+						for(int i=0; i<=8; i++)
+						{
+							fieldArray[i] = new LittleField();
 						}
+
+						currentField = fieldArray[0];
+
+						playerOne.sendMessage("{\"cmd\":\"disableReset\"}");
+						playerTwo.sendMessage("{\"cmd\":\"disableReset\"}");
 
 						updateUserField();
 						gamestate = Gamestate.RUNNING;
@@ -439,6 +506,8 @@ public class InceptionTicTacToe extends Game{
 
 			gameID = "";
 			gamestate = Gamestate.CLOSED;
+
+			super.closeGame();
 
 			return true;
 		} catch (IOException e) {
@@ -481,8 +550,8 @@ public class InceptionTicTacToe extends Game{
 		}
 
 	}
-	
-	public int getCompleteResult() {
+
+	private int getCompleteResult() {
 		switch(currentGameType) {
 		case TicTacToe:
 			return fieldArray[0].getResult();
@@ -539,25 +608,31 @@ public class InceptionTicTacToe extends Game{
 	/**
 	 * Nach jeder Spielrunde wird der counter um 1 nach oben gez�hlt.
 	 * Wenn counter == rounds wird das Gesamtergebnis bestimmt.
-	 * @return Spielergebnis
 	 */
-	public int getEndResult() {	
-		if(counter == rounds) {
+	private void doEndResult() {
+		if(counter >= rounds)
+		{
+			if(playerOne.isRegisteredPlayer()) playerOne.addPoints(wonByPlayerOne);
+			if(playerTwo.isRegisteredPlayer()) playerTwo.addPoints(wonByPlayerTwo);
+
 			if(wonByPlayerOne>wonByPlayerTwo) {
-				return 1;
+				playerOne.sendInfoMessage("Du hast " + wonByPlayerOne + " zu " + wonByPlayerTwo + " gewonnen!");
+				playerTwo.sendInfoMessage("Du hast " + wonByPlayerTwo + " zu " + wonByPlayerOne + " verloren!");
+				playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+				playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
+			}else if(wonByPlayerTwo>wonByPlayerOne) {
+				playerTwo.sendInfoMessage("Du hast " + wonByPlayerTwo + " zu " + wonByPlayerOne + " gewonnen!");
+				playerOne.sendInfoMessage("Du hast " + wonByPlayerOne + " zu " + wonByPlayerTwo + " verloren!");
+				playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+				playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
 			}else {
-				if(wonByPlayerTwo>wonByPlayerOne) {
-					return 2;
-				}else {
-					if(wonByPlayerTwo==wonByPlayerOne) {
-						return 3;
-					}else {
-						return 0;
-					}
-				}
+				playerOne.sendInfoMessage("Ihr habt " + wonByPlayerTwo + " zu " + wonByPlayerOne + " unentschieden gespielt!");
+				playerTwo.sendInfoMessage("Ihr habt " + wonByPlayerTwo + " zu " + wonByPlayerOne + " unentschieden gespielt!");
+				playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
+				playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
 			}
-		}else {
-			return 0;
+
+			gamestate = Gamestate.PAUSED;
 		}
 	}
 	
@@ -566,7 +641,7 @@ public class InceptionTicTacToe extends Game{
 	 * @param number Nummer des Feldes (0-8)
 	 * @return 0, 1 oder 2. Welcher Spieler dieses Unterfeld gewonnen hat.
 	 */
-	public int getLittleFieldResult(int number) {
+	private int getLittleFieldResult(int number) {
 		if(currentGameType == GameType.TicTacToe) {
 			return getCompleteResult();
 		}
@@ -588,7 +663,7 @@ public class InceptionTicTacToe extends Game{
 	 * Leitet je nach aktuellem Feldtyp auf Funktionen der Spielinstanzen weiter.
 	 * @return Array mit dem Zustand des aktuellen Spielfeldes. int[8] bei TicTacToe, int[81] bei SuperTicTacToe
 	 */
-	public int[] getCompleteFieldArray() {
+	private int[] getCompleteFieldArray() {
 		int[] result = new int[81];
 		for(int i=0; i<81; i++) {
 			result[i] = fieldArray[(i/9)].getFieldArray()[(i % 9)];
@@ -599,26 +674,13 @@ public class InceptionTicTacToe extends Game{
 	 * Leitet je nach aktuellem Feldtyp auf Funktionen der Spielinstanzen weiter.
 	 * @return aktives Teilfeld; -1 bei Error
 	 */
-	public int getCurrentField() {
+	private int getCurrentField() {
 		for(int i=0; i<=8; i++) {
 			if(this.fieldArray[i] == this.currentField) {
 				return i;
 			}
 		}
 		return 42;
-	}
-	/**
-	 * @return GameType.Inception_TicTacToe
-	 */
-	public GameType getGameType() {
-		return GameType.Inception_TicTacToe;
-	}
-	/**
-	 * Gibt Spieltyp des aktuellen Spielfeldes zur�ck (Normal oder Super)
-	 * @return currentGameType of field
-	 */
-	public GameType getGameTypeOfField() {
-		return currentGameType;
 	}
 }
 

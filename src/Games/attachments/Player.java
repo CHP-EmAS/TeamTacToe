@@ -66,6 +66,11 @@ public class Player {
         else return false;
     }
 
+    public void addPoints(int amount)
+    {
+        if(user != null) user.addPoints(amount);
+    }
+
     public String getHttpSessionID(){return httpSessionID;}
     public Session getSession(){return socketSession;}
 }
