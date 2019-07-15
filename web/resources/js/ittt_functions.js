@@ -46,7 +46,6 @@ socket.onmessage = function (ev)
                     document.getElementById('reset').visible = false;
                     break;
                 case 'roundPromt':
-                    console.log('Easy');
                     var roundstr = prompt("In wie vielen Inceptionebenen willst du eintauchen? (Rundenanzahl 1-50)", "5");
                     var rounds = 5;
 

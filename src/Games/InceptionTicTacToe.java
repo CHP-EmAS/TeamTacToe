@@ -8,9 +8,6 @@ import javax.websocket.Session;
 
 import org.json.JSONObject;
 
-import Games.instances.*;
-import Games.Game.Gamestate;
-import Games.Game.GameType;
 import Games.attachments.LittleField;
 import Games.attachments.Player;
 
@@ -186,17 +183,21 @@ public class InceptionTicTacToe extends Game{
 
 											int wF = field/9;
 
+                                            LittleField newField = new LittleField();
+
 											for(int t = 0; t < 9; t++)
 											{
 												int tilePlayer = getLittleFieldResult(t);
 												if(tilePlayer != 1 && tilePlayer != 2) tilePlayer = 0;
-												fieldArray[wF].getTile(t).setPlayer(tilePlayer);
+                                                newField.getTile(t).setPlayer(tilePlayer);
 											}
 
-											for(int f = 0; f < 9; f++)
-											{
-												if(f != wF) fieldArray[f].reset();
-											}
+                                            for(int f = 0; f < 9; f++)
+                                            {
+                                                fieldArray[f].reset();
+                                            }
+
+                                            fieldArray[wF] = newField;
 
 											setNextField(wF);
 
@@ -210,17 +211,21 @@ public class InceptionTicTacToe extends Game{
 
 											int wF2 = field/9;
 
-											for(int t = 0; t < 9; t++)
-											{
-												int tilePlayer = getLittleFieldResult(t);
-												if(tilePlayer != 1 && tilePlayer != 2) tilePlayer = 0;
-												fieldArray[wF2].getTile(t).setPlayer(tilePlayer);
-											}
+                                            LittleField newField2 = new LittleField();
 
-											for(int f = 0; f < 9; f++)
-											{
-												if(f != wF2) fieldArray[f].reset();
-											}
+                                            for(int t = 0; t < 9; t++)
+                                            {
+                                                int tilePlayer = getLittleFieldResult(t);
+                                                if(tilePlayer != 1 && tilePlayer != 2) tilePlayer = 0;
+                                                newField2.getTile(t).setPlayer(tilePlayer);
+                                            }
+
+                                            for(int f = 0; f < 9; f++)
+                                            {
+                                                fieldArray[f].reset();
+                                            }
+
+                                            fieldArray[wF2] = newField2;
 
 											setNextField(wF2);
 

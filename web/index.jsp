@@ -30,6 +30,16 @@
 
 			req.send();
 		}
+
+		function joinGame()
+		{
+			var gameID = prompt("Bitte Spiel ID eingeben:", "");
+
+			if (gameID != null || gameID != "")
+			{
+				socket.send('{"forward":"' + gameID + '","cmd":"setRounds","amount":'+rounds+'}');
+			}
+		}
 	</script>
 	<style>
 		<%@ include file="/css/main.css" %>
