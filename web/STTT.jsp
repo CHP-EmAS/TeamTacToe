@@ -55,6 +55,9 @@
 	</div>
 	<div id="d3">
 		<h2>TeamTacToe</h2>	
+		<button id="stylesheet1" class="Footer_button">Default</button>
+		<button id="stylesheet2" class="Footer_button">Darkmode</button>
+		<button id="stylesheet3" class="Footer_button">Awesome</button>
 	</div>
 </div>
 </body>
@@ -86,5 +89,25 @@
 	table += "<h1 id='msgBox'></h1>";
 	table += "<button id='reset' disabled onclick='restartGame()'>Nochmal!</button>";
 	document.getElementById('d2').innerHTML = table;
+</script>
+<script>
+	function swapStyleSheet(sheet) {
+		document.getElementById("pagestyle").setAttribute("href", sheet);
+	}
+	function initate() {
+		var style1 = document.getElementById("stylesheet1");
+		var style2 = document.getElementById("stylesheet2");
+		var style3 = document.getElementById("stylesheet3");
+		style1.onclick = function() {
+			swapStyleSheet("/css/main.css");
+		};
+		style2.onclick = function() {
+			swapStyleSheet("/css/main.css");
+		};
+		style3.onclick = function() {
+			swapStyleSheet("/css/main.css");
+		};
+	}
+	window.onload = initate;
 </script>
 </html>
