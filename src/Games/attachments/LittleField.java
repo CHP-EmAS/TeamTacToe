@@ -1,7 +1,7 @@
 package Games.attachments;
 
 public class LittleField {
-	private Tile[] field = new Tile[9];
+	public Tile[] field = new Tile[9];
 	private Tile errorTile = new Tile();
 	
 	public LittleField() {
