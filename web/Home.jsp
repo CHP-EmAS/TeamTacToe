@@ -6,9 +6,7 @@
 	<meta charset="ISO-8859-1">
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-	<style>
-		<%@ include file="/css/main.css" %>
-	</style>
+	<link id="pagestyle" rel="stylesheet" type="text/css" href="css/main.css" title="norm">
 	<style>
 		#d1_1 {
 			display: inline-block;
@@ -102,13 +100,13 @@
 		var style2 = document.getElementById("stylesheet2");
 		var style3 = document.getElementById("stylesheet3");
 		style1.onclick = function() {
-			swapStyleSheet("/css/main.css");
+			swapStyleSheet("css/main.css");
 		};
 		style2.onclick = function() {
-			swapStyleSheet("/css/main.css");
+			swapStyleSheet("css/darkmode.css");
 		};
 		style3.onclick = function() {
-			swapStyleSheet("/css/main.css");
+			swapStyleSheet("css/main.css");
 		};
 	}
 	window.onload = initate;
