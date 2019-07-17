@@ -341,7 +341,7 @@ public class FancyTicTacToe extends Game{
                                         playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
                                         playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
 
-                                        if(playerOne.isRegisteredPlayer()) playerTwo.addPoints(3);
+                                        if(playerOne.isRegisteredPlayer()) playerTwo.addPoints(5);
 
                                         gamestate = Gamestate.PAUSED;
                                         return;
@@ -351,7 +351,7 @@ public class FancyTicTacToe extends Game{
                                         playerOne.sendMessage("{\"cmd\":\"enableReset\"}");
                                         playerTwo.sendMessage("{\"cmd\":\"enableReset\"}");
 
-                                        if(playerTwo.isRegisteredPlayer()) playerTwo.addPoints(3);
+                                        if(playerTwo.isRegisteredPlayer()) playerTwo.addPoints(5);
 
                                         gamestate = Gamestate.PAUSED;
                                         return;
@@ -417,19 +417,18 @@ public class FancyTicTacToe extends Game{
         if(currentPlayer.equals(playerOne))
         {
             this.currentField.getTile(field).setPlayer(1);
-            playerOne.sendInfoMessage("Wähle das Feld aus welches gelöscht werden soll!");
+            playerOne.sendInfoMessage("Wähle ein Feld aus welches gelöscht werden soll!");
         }
         else if(currentPlayer.equals(playerTwo))
         {
             this.currentField.getTile(field).setPlayer(2);
-            playerOne.sendInfoMessage("Wähle das Feld aus welches gelöscht werden soll!");
+            playerOne.sendInfoMessage("Wähle ein Feld aus welches gelöscht werden soll!");
         }
-
-
 
 		resetItem(field);
 		setNextField(field%9);
 	}
+
 	private void triggerDoubleTurn(int field) {
         if(currentPlayer.equals(playerOne))
         {
@@ -443,6 +442,9 @@ public class FancyTicTacToe extends Game{
             playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Hey, ich mag dich, du darfst nochmal! <3\"}");
             playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf nochmal :(!\"}");
         }
+
+        switchCurrentPlayer();
+
 		resetItem(field);
 	}
 	
