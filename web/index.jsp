@@ -71,7 +71,7 @@
 			<br>
 			<button onclick="createGame('ITTT')">Inception Tic Tac Toe</button>
 			<br>
-			<button>Fancy Tic Tac Toe</button>
+			<button onclick="createGame('FTTT')">Fancy Tic Tac Toe</button>
 			<br>
 			<button onclick="joinGame()">Join Game</button>
 			<br>

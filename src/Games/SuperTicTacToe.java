@@ -51,7 +51,7 @@ public class SuperTicTacToe extends Game{
             playerOne = new Player(playerSession);
             if(playerTwo == null) {
                 playerOne.sendInfoMessage("Warte auf Mitspieler!");
-                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen: \\n\\n" + url + "\"}");
             }
         }
         else if(playerTwo == null)
@@ -60,7 +60,7 @@ public class SuperTicTacToe extends Game{
             if(playerOne == null)
             {
                 playerTwo.sendInfoMessage("Warte auf Mitspieler!");
-                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen: \\n\\n" + url + "\"}");
             }
         }
         else return false;

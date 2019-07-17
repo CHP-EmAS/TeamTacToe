@@ -340,7 +340,7 @@ public class InceptionTicTacToe extends Game{
 			if(playerTwo == null)
 			{
 				playerOne.sendMessage("{\"cmd\":\"roundPromt\"}");
-				playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+				playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Inception TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen: \\n\\n" + url + "\"}");
 				playerOne.sendInfoMessage("Warte auf Mitspieler!");
 			}
 		}
@@ -349,7 +349,7 @@ public class InceptionTicTacToe extends Game{
 			playerTwo = new Player(playerSession);
 			if (playerOne == null) {
 				playerTwo.sendMessage("{\"cmd\":\"roundPromt\"}");
-				playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+				playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Inception TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen: \\n\\n" + url + "\"}");
 				playerTwo.sendInfoMessage("Warte auf Mitspieler!");
 			}
 		}

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class FancyTicTacToe extends Game{
-	//Status des Spiels, ob ein normaler Klick folgt, eine Mine gesetzt wird, oder ein Feld gelˆscht wird
+	//Status des Spiels, ob ein normaler Klick folgt, eine Mine gesetzt wird, oder ein Feld gelÔøΩscht wird
 	 public enum Status{
 			NORMAL, MINE, DELETE;
 		}
@@ -21,8 +21,8 @@ public class FancyTicTacToe extends Game{
 
     private FancyLittleField[] fields;
     private FancyLittleField currentField;
-    
-    public Status status;
+
+    private Status status;
 
     public FancyTicTacToe(String gameID){
         super(GameType.Fancy_TicTacToe);
@@ -60,7 +60,7 @@ public class FancyTicTacToe extends Game{
             playerOne = new Player(playerSession);
             if(playerTwo == null) {
                 playerOne.sendInfoMessage("Warte auf Mitspieler!");
-                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Fancy TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen: \\n\\n" + url + "\"}");
             }
         }
         else if(playerTwo == null)
@@ -69,7 +69,7 @@ public class FancyTicTacToe extends Game{
             if(playerOne == null)
             {
                 playerTwo.sendInfoMessage("Warte auf Mitspieler!");
-                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Super TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen:\n" + url + "\"}");
+                playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Wilkommen bei Fancy TicTacToe, sende deinem Mitspieler einfach diesen Link und schon kannst los gehen: \\n\\n" + url + "\"}");
             }
         }
         else return false;
@@ -291,9 +291,8 @@ public class FancyTicTacToe extends Game{
             					//Normaler Click
             					case NONE: 
             						setTile((fieldNum%9));
-            						switchCurrentPlayer();
             						break;
-            					//Folgend das auslˆsen der verschiedenen Items
+            					//Folgend das ausl√∂sen der verschiedenen Items
             					case SWAP:
             						triggerSwap(fieldNum);
             						break;
@@ -304,11 +303,7 @@ public class FancyTicTacToe extends Game{
             						triggerDoubleTurn(fieldNum);
             						break;
             					case TIME_OUT:
-            						triggerTimeOut(fieldNum);
-            						break;
             					case TIME_OUT_VISIBLE_ONE:
-            						triggerTimeOut(fieldNum);
-            						break;
             					case TIME_OUT_VISIBLE_TWO:
             						triggerTimeOut(fieldNum);
             						break;
@@ -322,6 +317,7 @@ public class FancyTicTacToe extends Game{
             						triggerSwapAll(fieldNum);
             						break;
             					}
+
             					updateUserField();
             					int gameResult = getCompleteResult();
 
@@ -334,8 +330,10 @@ public class FancyTicTacToe extends Game{
                                         gamestate = Gamestate.PAUSED;
                                         return;
                                     case 0:
-                                        if(player.equals(playerOne)) setCurrentPlayer(playerTwo);
-                                        else setCurrentPlayer(playerOne);
+                                        if(status == Status.NORMAL) {
+                                            if (player.equals(playerOne)) setCurrentPlayer(playerTwo);
+                                            else setCurrentPlayer(playerOne);
+                                        }
                                         return;
                                     case 1:
                                         playerOne.sendInfoMessage("Du hast gewonnen!");
@@ -365,90 +363,167 @@ public class FancyTicTacToe extends Game{
             			case MINE:
             				if((fields[fieldNum/9].getTile(fieldNum%9).getPlayer()==0)) {
             					setTimeOut(fieldNum);
-            					switchCurrentPlayer();
+
+                                if (player.equals(playerOne)) setCurrentPlayer(playerTwo);
+                                else setCurrentPlayer(playerOne);
+
             					status = Status.NORMAL;
-            				}
-            				updateUserField();
+                                updateUserField();
+            				} else player.sendInfoMessage("Ung√ºltiger Zug! Sie m√ºssen ein bereits gesetztes Feld ausw√§hlen");
             				break;
             			case DELETE:
             				if((fields[fieldNum/9].getTile(fieldNum%9).getPlayer()!=0)) {
             					fields[fieldNum/9].getTile(fieldNum%9).setPlayer(0);
-            					switchCurrentPlayer();
+
+                                if (player.equals(playerOne)) setCurrentPlayer(playerTwo);
+                                else setCurrentPlayer(playerOne);
+
             					status = Status.NORMAL;
-            				}
-            				updateUserField();
+                                updateUserField();
+            				}else player.sendInfoMessage("Ung√ºltiger Zug! Sie m√ºssen ein leeres Feld ausw√§hlen");
             				break;
             			}
-                    } else {
-                        player.sendInfoMessage("Dein Mitspieler ist am Zug!");
-                    }
-                } else {
-                    System.out.println("Fehler beim Klicken eines Feldes! Field <" + fieldNum + "> out of range");
-                }
-            } else {
-                player.sendInfoMessage("Ung√ºltiger Zug! Sie brauchen einen Mitspieler!");
-            }
+                    } else player.sendInfoMessage("Dein Mitspieler ist am Zug!");
+                } else System.out.println("Fehler beim Klicken eines Feldes! Field <" + fieldNum + "> out of range");
+            } else player.sendInfoMessage("Ung√ºltiger Zug! Sie brauchen einen Mitspieler!");
         }
     }
     
 	/**
-	 * Auslˆsen eines Swap Events
+	 * Ausl√∂sen eines Swap Events
 	 * @param field Feld im Spielfeld auf dem das Event stattfindet
 	 */
 	private void triggerSwap(int field) {
-		switchCurrentPlayer();
-		setTile(field%9);
+        if(currentPlayer.equals(playerOne))
+        {
+            this.currentField.getTile(field).setPlayer(2);
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Swap-Feld getroffen. Das Feld geh√∂rt nun deinem Mitspieler!\"}");
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Swap-Feld getroffen, das Feld geh√∂rt nun dir!\"}");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            this.currentField.getTile(field).setPlayer(1);
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Swap-Feld getroffen, das Feld geh√∂rt nun dir!\"}");
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Swap-Feld getroffen. Das Feld geh√∂rt nun deinem Mitspieler!\"}");
+        }
+
 		setNextField(field%9);
 		resetItem(field);
 	}
 
 	private void triggerDelete(int field) {
 		status = Status.DELETE;
-		setTile(field%9);
+
+        if(currentPlayer.equals(playerOne))
+        {
+            this.currentField.getTile(field).setPlayer(1);
+            playerOne.sendInfoMessage("W√§hle das Feld aus welches gel√∂scht werden soll!");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            this.currentField.getTile(field).setPlayer(2);
+            playerOne.sendInfoMessage("W√§hle das Feld aus welches gel√∂scht werden soll!");
+        }
+
+
+
 		resetItem(field);
 		setNextField(field%9);
 	}
 	private void triggerDoubleTurn(int field) {
-		setTile(field%9);
+        if(currentPlayer.equals(playerOne))
+        {
+            this.currentField.getTile(field).setPlayer(1);
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Hey, ich mag dich, du darfst nochmal! <3\"}");
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf nochmal :(!\"}");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            this.currentField.getTile(field).setPlayer(2);
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Hey, ich mag dich, du darfst nochmal! <3\"}");
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf nochmal :(!\"}");
+        }
 		resetItem(field);
 	}
 	
 	private void triggerTimeOut(int field) {
 		resetItem(field);
-		switchCurrentPlayer();
+
+        if(currentPlayer.equals(playerOne))
+        {
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Ausetzen-Feld getroffen! Dann darfst du jetzt auch aussetzen!\"}");
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf aussetzen! Wie traurig.\"}");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Ausetzen-Feld getroffen! Dann darfst du jetzt auch aussetzen!\"}");
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf aussetzen! Wie traurig.\"}");
+        }
 	}
 	private void triggerMine(int field) {
+
+        if(currentPlayer.equals(playerOne))
+        {
+            this.currentField.getTile(field).setPlayer(1);
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Minen-Feld getroffen! Du darfst nun eine unsichtbare Mine setzen, wenn jemand dieses Feld anglickt muss er ausetzen!\"}");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            this.currentField.getTile(field).setPlayer(2);
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Minen-Feld getroffen! Du darfst nun eine unsichtbare Mine setzen, wenn jemand dieses Feld anglickt muss er ausetzen!\"}");
+        }
+
 		status = Status.MINE;
-		setTile(field%9);
+
 		resetItem(field);
 		setNextField(field%9);
 	}
 	
 	private void triggerBomb(int field) {
+        if(currentPlayer.equals(playerOne))
+        {
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ne Bombe ausgel√∂st! Nun ist das kleine Feld weg. Ist ja nicht deine Schuld, die sieht man ja so schlecht.\"}");
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein kompetenter Mitspieler hat eine Bombe angeklickt. Mhh, da ist das kleine Feld weg! Beschwer dich bei Ihm XD\"}");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ne Bombe ausgel√∂st! Nun ist das kleine Feld weg. Ist ja nicht deine Schuld, die sieht man ja so schlecht.\"}");
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein kompetenter Mitspieler hat eine Bombe angeklickt. Mhh, da ist das kleine Feld weg! Beschwer dich bei Ihm XD\"}");
+        }
+
 		for(int i=0; i<=8; i++) {
 			this.currentField.getTile(i).setPlayer(0);
 		}
+
 		resetItem(field);
 		setNextField(field%9);
-		switchCurrentPlayer();
 	}
 	
 	private void triggerSwapAll(int field) {
-		int[] fieldArray = getCompleteFieldArray();
+        if(currentPlayer.equals(playerOne))
+        {
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein ULTRA-Swap erwischt, ich bin so verwirrt, ich drehe nun alles um!\"}");
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler ein ULTRA-Swap erwischt, ich bin so verwirrt, ich drehe nun alles um!\"}");
+        }
+        else if(currentPlayer.equals(playerTwo))
+        {
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein ULTRA-Swap erwischt, ich bin so verwirrt, ich drehe nun alles um!\"}");
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler ein ULTRA-Swap erwischt, ich bin so verwirrt, ich drehe nun alles um!\"}");
+        }
+
 		for(int i=0; i<81; i++) {
-			if(fieldArray[i]==1) {
+			if(fields[i/9].getTile(i%9).getPlayer()==1) {
 				fields[i/9].getTile(i%9).setPlayer(2);
 			}
-			if(fieldArray[i]==2) {
+            else if(fields[i/9].getTile(i%9).getPlayer()==2) {
 				fields[i/9].getTile(i%9).setPlayer(1);
 			}
 		}
 		resetItem(field);
 		setNextField(field%9);
-		switchCurrentPlayer();
 	}
 	/**
-	 * Setzt TimeOut Event auf ¸bergebenes Feld
+	 * Setzt TimeOut Event auf ÔøΩbergebenes Feld
 	 * @param field 0-80
 	 */
 	private void setTimeOut(int field) {
@@ -555,11 +630,11 @@ public class FancyTicTacToe extends Game{
     }
 
     /**
-     * Setzt Feld in aktuellem Spielfeld, f¸r aktuellen Spieler. Wechselt nicht mehr automatisch currentPlayer. Daf¸r Funktion switchCurrentPlayer()
+     * Setzt Feld in aktuellem Spielfeld, fÔøΩr aktuellen Spieler. Wechselt nicht mehr automatisch currentPlayer. DafÔøΩr Funktion switchCurrentPlayer()
      * @param number Nummer von 1-9
      * @return gibt zur√ºck ob Feld gesetzt wurde
      */
-	public boolean setTile(int number) {
+    private boolean setTile(int number) {
 		boolean success = false;
 		if((this.playerOne == this.currentPlayer) && ((0<=number)&&(number<=8))) {
 			this.currentField.getTile(number).setPlayer(1);
@@ -578,7 +653,7 @@ public class FancyTicTacToe extends Game{
 	/**
 	 * Wechselt aktuellen Spieler
 	 */
-	public void switchCurrentPlayer() {
+    private void switchCurrentPlayer() {
 		if(this.currentPlayer.equals(this.playerOne)){
 			this.currentPlayer = playerTwo;
 		}else {
@@ -586,11 +661,11 @@ public class FancyTicTacToe extends Game{
 		}
 	}
 	/**
-	 * Setzt n‰chstes currentField
-	 * Wenn ¸bergebenes Feld bereits beendet wird zuf‰llig das n‰chste bestimmt
-	 * @param number Nummer von 0-8 f¸r n‰chstes CurrentField
+	 * Setzt nÔøΩchstes currentField
+	 * Wenn ÔøΩbergebenes Feld bereits beendet wird zufÔøΩllig das nÔøΩchste bestimmt
+	 * @param number Nummer von 0-8 fÔøΩr nÔøΩchstes CurrentField
 	 */
-	public void setNextField(int number) {
+    private void setNextField(int number) {
 		Random rnd = new Random();
 		int nextField;
 		if(fields[number].getResult()==0) {
