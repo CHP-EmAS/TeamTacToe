@@ -8,11 +8,12 @@
 	<meta charset="ISO-8859-1">
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-	<script type="text/javascript" src="resources/js/sha512.js"></script>
-	<script src="/resources/js/home.js?6"></script>
-	<style>
-		<%@ include file="/css/main.css" %>
-	</style>
+
+	<link id="pagestyle" rel="stylesheet" type="text/css" href="css/main.css" title="norm">
+
+	<script type="text/javascript" src="/resources/js/sha512.js"></script>
+	<script type="text/javascript" src="/resources/js/home.js"></script>
+
 	<style>
 		#d1_1 {
 			display: inline-block;
@@ -55,7 +56,7 @@
 						<jsp:getProperty property="alert" name="user"/>
 						<input placeholder="Benutzername" id="nickname" type="text" name="nickname" required/>
 						<input placeholder="Passwort" id="nopassword" type="password" required/>
-						<input type="hidden" id="pw" value="" name="pw"/>
+						<input type="hidden" id="pw" value="test" name="pw"/>
 						<input type="submit" value="Login">
 					</form>
 					<a href="register">Noch nicht registriert?</a>
@@ -100,7 +101,62 @@
 	</div>
 	<div id="d3">
 		<h2>TeamTacToe</h2>
+		<button id="stylesheet1" onClick="setStyle('main')" class="Footer_button">Default</button>
+		<button id="stylesheet2" onClick="setStyle('dark')" class="Footer_button">Darkmode</button>
+		<button id="stylesheet3" onClick="setStyle('main')" class="Footer_button">Awesome</button>
 	</div>
 </div>
 </body>
+<script>
+	function setStyle(pStyle) {
+
+		switch(pStyle)
+		{
+			case "main":
+				document.cookie = "pStyle=main";
+				break;
+			case "dark":
+				document.cookie = "pStyle=dark";
+				break;
+			default:
+				document.cookie = "pStyle=main";
+				break;
+		}
+
+		loadStyle();
+	}
+
+	window.onload = loadStyle;
+
+	function loadStyle()
+	{
+		var style = getCookie("pStyle");
+
+		switch(style)
+		{
+			case "main":
+				document.getElementById("pagestyle").setAttribute("href", "/css/main.css");
+				break;
+			case "dark":
+				document.getElementById("pagestyle").setAttribute("href", "/css/darkmode.css");
+				break;
+		}
+	}
+
+	function getCookie(cname) {
+		var name = cname + "=";
+		var decodedCookie = decodeURIComponent(document.cookie);
+		var ca = decodedCookie.split(';');
+		for(var i = 0; i <ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) === ' ') {
+				c = c.substring(1);
+			}
+			if (c.indexOf(name) === 0) {
+				return c.substring(name.length, c.length);
+			}
+		}
+		return "";
+	}
+</script>
 </html>

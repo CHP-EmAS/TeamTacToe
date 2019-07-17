@@ -130,6 +130,7 @@ public class Game
     {
         t_checkPlayer.cancel();
         t_checkPlayer.purge();
+
         return true;
     }
 

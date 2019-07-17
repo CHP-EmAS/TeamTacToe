@@ -1,5 +1,4 @@
 /*Homepage*/
-
 * {
     font-family: 'Open Sans', sans-serif;
 }
@@ -12,18 +11,22 @@ body {
 #container {
     min-height: 100%;
     min-width: 100%;
+    background-color: #212121;
 }
 
 #d1 {
     height: 80px;
     padding: 16px;
     padding-left: 40px;
-    border-bottom: 3px solid black;
+    border-bottom: 3px solid #BB86fc;
+    background-color: black;
+    color: #BB86fc;
 }
 
 #d2 {
     padding: 16px;
     padding-bottom: 28px;
+    height: 300px;
 }
 
 #d3 {
@@ -35,7 +38,9 @@ body {
     padding: 16px;
     padding-left: 40px;
     text-align: center;
-    border-top: 3px solid black;
+    border-top: 3px solid #BB86fc;
+    background-color: black;
+    color: #BB86fc;
 }
 
 #d2_1 {
@@ -47,6 +52,7 @@ body {
     margin-left: 44px;
     display: inline-block;
     vertical-align: top;
+    color: #BB86fc;
 }
 
 .main_button {
@@ -55,19 +61,32 @@ body {
     padding: 16px;
     margin-left: 40px;
     margin-top: 10px;
+    background-color: #3700b3;
+    border: solid #a22821 1px;
+    color: #03dac6;
+}
+
+.main_button:hover {
+    background-color: #03dac6;
+    color: #3700b3;
+    border: none;
 }
 
 .Footer_button {
     min-width: 70px;
     min-height: 20px;
+    background-color: #3700b3;
+    border: solid #a22821 1px;
+    color: #03dac6;
 }
 
-/*Registrationpage*/
+.Footer_button:hover {
+    background-color: #03dac6;
+    color: #3700b3;
+    border: none;
+}
 
-.input{
-    min-width: 200px;
-    min-height: 40px;
-    padding: 16px;
-    margin-left: px;
-    margin-top: 10px;
+/*Aboutpage*/
+#about {
+    color: #4d1d24;
 }

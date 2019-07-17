@@ -80,40 +80,29 @@ function updateFieldData(fieldData,currentfield,bigFieldData){
         var y = parseInt(bi/3);
 
         var elements;
-        var disabled = false;
 
         if(bigFieldData[bi] === 1)
         {
             document.getElementById('subTable_' + y + '_' + x).style.background = 'red';
-            disabled = true;
         }
         else if(bigFieldData[bi] === 2)
         {
             document.getElementById('subTable_' + y + '_' + x).style.background = 'green';
-            disabled = true;
         }
         else if(bigFieldData[bi] === -1)
         {
             document.getElementById('subTable_' + y + '_' + x).style.background = 'grey';
-            disabled = true;
         }
         else
         {
             if(bi === currentfield)
             {
                 document.getElementById('subTable_' + y + '_' + x).style.background = 'yellow';
-                disabled = false;
             }
             else
             {
                 document.getElementById('subTable_' + y + '_' + x).style.background = 'white';
-                disabled = true;
             }
-        }
-
-        elements = document.getElementsByClassName('buttonGroup_' + y + '_' + x);
-        for (var e = 0; e < elements.length; e++) {
-            elements[e].disabled = disabled;
         }
     }
 }

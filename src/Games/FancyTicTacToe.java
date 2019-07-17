@@ -318,7 +318,8 @@ public class FancyTicTacToe extends Game{
             						break;
             					}
 
-            					updateUserField();
+                                if(status == Status.NORMAL) updateUserField();
+
             					int gameResult = getCompleteResult();
 
                                 switch (gameResult) {
@@ -331,7 +332,7 @@ public class FancyTicTacToe extends Game{
                                         return;
                                     case 0:
                                         if(status == Status.NORMAL) {
-                                            if (player.equals(playerOne)) setCurrentPlayer(playerTwo);
+                                            if (currentPlayer.equals(playerOne)) setCurrentPlayer(playerTwo);
                                             else setCurrentPlayer(playerOne);
                                         }
                                         return;
@@ -364,8 +365,16 @@ public class FancyTicTacToe extends Game{
             				if((fields[fieldNum/9].getTile(fieldNum%9).getPlayer()==0)) {
             					setTimeOut(fieldNum);
 
-                                if (player.equals(playerOne)) setCurrentPlayer(playerTwo);
-                                else setCurrentPlayer(playerOne);
+                                if (player.equals(playerOne))
+                                {
+                                    setCurrentPlayer(playerTwo);
+                                    playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Minen-Feld versteckt!\"}");
+                                }
+                                else
+                                {
+                                    setCurrentPlayer(playerOne);
+                                    playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Minen-Feld versteckt!\"}");
+                                }
 
             					status = Status.NORMAL;
                                 updateUserField();
@@ -375,8 +384,16 @@ public class FancyTicTacToe extends Game{
             				if((fields[fieldNum/9].getTile(fieldNum%9).getPlayer()!=0)) {
             					fields[fieldNum/9].getTile(fieldNum%9).setPlayer(0);
 
-                                if (player.equals(playerOne)) setCurrentPlayer(playerTwo);
-                                else setCurrentPlayer(playerOne);
+                                if (player.equals(playerOne))
+                                {
+                                    setCurrentPlayer(playerTwo);
+                                    playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Feld gelöscht!\"}");
+                                }
+                                else
+                                {
+                                    setCurrentPlayer(playerOne);
+                                    playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Feld gelöscht!\"}");
+                                }
 
             					status = Status.NORMAL;
                                 updateUserField();
@@ -396,13 +413,13 @@ public class FancyTicTacToe extends Game{
 	private void triggerSwap(int field) {
         if(currentPlayer.equals(playerOne))
         {
-            this.currentField.getTile(field).setPlayer(2);
+            this.currentField.getTile(field%9).setPlayer(2);
             playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Swap-Feld getroffen. Das Feld gehört nun deinem Mitspieler!\"}");
             playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Swap-Feld getroffen, das Feld gehört nun dir!\"}");
         }
         else if(currentPlayer.equals(playerTwo))
         {
-            this.currentField.getTile(field).setPlayer(1);
+            this.currentField.getTile(field%9).setPlayer(1);
             playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler hat ein Swap-Feld getroffen, das Feld gehört nun dir!\"}");
             playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Swap-Feld getroffen. Das Feld gehört nun deinem Mitspieler!\"}");
         }
@@ -416,13 +433,15 @@ public class FancyTicTacToe extends Game{
 
         if(currentPlayer.equals(playerOne))
         {
-            this.currentField.getTile(field).setPlayer(1);
+            this.currentField.getTile(field%9).setPlayer(1);
+            playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du darfst ein Feld löschen!\"}");
             playerOne.sendInfoMessage("Wähle ein Feld aus welches gelöscht werden soll!");
         }
         else if(currentPlayer.equals(playerTwo))
         {
-            this.currentField.getTile(field).setPlayer(2);
-            playerOne.sendInfoMessage("Wähle ein Feld aus welches gelöscht werden soll!");
+            this.currentField.getTile(field%9).setPlayer(2);
+            playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du darfst ein Feld löschen!\"}");
+            playerTwo.sendInfoMessage("Wähle ein Feld aus welches gelöscht werden soll!");
         }
 
 		resetItem(field);
@@ -432,19 +451,20 @@ public class FancyTicTacToe extends Game{
 	private void triggerDoubleTurn(int field) {
         if(currentPlayer.equals(playerOne))
         {
-            this.currentField.getTile(field).setPlayer(1);
+            this.currentField.getTile(field%9).setPlayer(1);
             playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Hey, ich mag dich, du darfst nochmal! <3\"}");
             playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf nochmal :(!\"}");
         }
         else if(currentPlayer.equals(playerTwo))
         {
-            this.currentField.getTile(field).setPlayer(2);
+            this.currentField.getTile(field%9).setPlayer(2);
             playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Hey, ich mag dich, du darfst nochmal! <3\"}");
             playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Dein Mitspieler darf nochmal :(!\"}");
         }
 
         switchCurrentPlayer();
 
+        setNextField(field%9);
 		resetItem(field);
 	}
 	
@@ -466,12 +486,12 @@ public class FancyTicTacToe extends Game{
 
         if(currentPlayer.equals(playerOne))
         {
-            this.currentField.getTile(field).setPlayer(1);
+            this.currentField.getTile(field%9).setPlayer(1);
             playerOne.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Minen-Feld getroffen! Du darfst nun eine unsichtbare Mine setzen, wenn jemand dieses Feld anglickt muss er ausetzen!\"}");
         }
         else if(currentPlayer.equals(playerTwo))
         {
-            this.currentField.getTile(field).setPlayer(2);
+            this.currentField.getTile(field%9).setPlayer(2);
             playerTwo.sendMessage("{\"cmd\":\"alert\",\"msg\":\"Du hast ein Minen-Feld getroffen! Du darfst nun eine unsichtbare Mine setzen, wenn jemand dieses Feld anglickt muss er ausetzen!\"}");
         }
 
