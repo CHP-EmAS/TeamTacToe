@@ -26,7 +26,7 @@
 <body>
 <div id="container">
 	<div id="d1">
-		<h1>Tic Tac Toe</h1>
+		<a href="http://chp-games.de">Tic Tac Toe</a>
 	</div>
 	<div id="d2">
 		<input id="inputStartGame" name="gameID" id="gameID" type="text">
@@ -35,9 +35,6 @@
 	</div>
 	<div id="d3">
 		<h2>TeamTacToe</h2>	
-		<button id="stylesheet1" class="Footer_button">Default</button>
-		<button id="stylesheet2" class="Footer_button">Darkmode</button>
-		<button id="stylesheet3" class="Footer_button">Awesome</button>
 	</div>
 </div>
 </body>
@@ -57,25 +54,5 @@
                 break;
         }
     }
-</script>
-<script>
-	function swapStyleSheet(sheet) {
-		document.getElementById("pagestyle").setAttribute("href", sheet);
-	}
-	function initate() {
-		var style1 = document.getElementById("stylesheet1");
-		var style2 = document.getElementById("stylesheet2");
-		var style3 = document.getElementById("stylesheet3");
-		style1.onclick = function() {
-			swapStyleSheet("css/main.css");
-		};
-		style2.onclick = function() {
-			swapStyleSheet("css/darkmode.css");
-		};
-		style3.onclick = function() {
-			swapStyleSheet("css/main.css");
-		};
-	}
-	window.onload = initate;
 </script>
 </html>

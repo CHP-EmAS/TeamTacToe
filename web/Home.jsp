@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,6 +7,8 @@
 	<title>Home</title>
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 	<link id="pagestyle" rel="stylesheet" type="text/css" href="css/main.css" title="norm">
+	<script type="text/javascript" src="/resources/js/sha512.js"></script>
+	<script type="text/javascript" src="/resources/js/home.js"></script>
 	<style>
 		#d1_1 {
 			display: inline-block;
@@ -37,32 +39,41 @@
 <div id="container">
 	<div id="d1">
 		<div id="d1_1">
-			<h1>Tic Tac Toe</h1>
+			<a href="http://chp-games.de">Tic Tac Toe</a>
 		</div>
 		<div id="d1_2">
-			<form action="...">
-				<input type="text" name="name" value="">
-  				<input type="password" name="password" value="">
-  				<input type="submit" value="Login">
-  			</form>
-  			<a href="http://google.com">Noch nicht registriert?</a>
+			<c:choose>
+				<c:when test="${user.loggedIn}">
+					<h1><jsp:getProperty property="nickname" name="user"/></h1> <button><a href="logout">Log Out!</a></button>
+				</c:when>
+				<c:otherwise>
+					<form action="login" class="form-container" method="post" onsubmit="hashSubmit();">
+						<jsp:getProperty property="alert" name="user"/>
+						<input placeholder="Benutzername" id="nickname" type="text" name="nickname" required/>
+						<input placeholder="Passwort" id="nopassword" type="password" required/>
+						<input type="hidden" id="pw" value="test" name="pw"/>
+						<input type="submit" value="Login">
+					</form>
+					<a href="register">Noch nicht registriert?</a>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	<div id="d2">
 		<div id="d2_1">
-			<button onclick="fieldClick(1)">Tic Tac Toe</button>
+			<button onclick="createGame('TTT')">Tic Tac Toe</button>
 			<br>
-			<button onclick="fieldClick(1)">Super Tic Tac Toe</button>
+			<button onclick="createGame('STTT')">Super Tic Tac Toe</button>
 			<br>
-			<button onclick="fieldClick(1)">Inception Tic Tac Toe</button>
+			<button onclick="createGame('ITTT')">Inception Tic Tac Toe</button>
 			<br>
-			<button onclick="fieldClick(1)">Fancy Tic Tac Toe</button>
+			<button onclick="createGame('FTTT')">Fancy Tic Tac Toe</button>
 			<br>
-			<button onclick="fieldClick(1)">Join Game</button>
+			<button onclick="joinGame()">Join Game</button>
 			<br>
-			<button onclick="fieldClick(1)">Leaderboard</button>
+			<button onClick="window.location='leaderboard.jsp'">Leaderboard</button>
 			<br>
-			<button onclick="fieldClick(1)">About</button>
+			<button onClick="window.location='Datenschutz.jsp'">Datenschutz</button>
 			</div>
 		<div id="d2_2">
 			<h2>What's Tic Tac Toe?</h2>
@@ -85,30 +96,7 @@
 	</div>
 	<div id="d3">
 		<h2>TeamTacToe</h2>
-		<button id="stylesheet1" class="Footer_button">Default</button>
-		<button id="stylesheet2" class="Footer_button">Darkmode</button>
-		<button id="stylesheet3" class="Footer_button">Awesome</button>
 	</div>
 </div>
 </body>
-<script>
-	function swapStyleSheet(sheet) {
-		document.getElementById("pagestyle").setAttribute("href", sheet);
-	}
-	function initate() {
-		var style1 = document.getElementById("stylesheet1");
-		var style2 = document.getElementById("stylesheet2");
-		var style3 = document.getElementById("stylesheet3");
-		style1.onclick = function() {
-			swapStyleSheet("css/main.css");
-		};
-		style2.onclick = function() {
-			swapStyleSheet("css/darkmode.css");
-		};
-		style3.onclick = function() {
-			swapStyleSheet("css/main.css");
-		};
-	}
-	window.onload = initate;
-</script>
 </html>
