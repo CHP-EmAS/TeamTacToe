@@ -5,6 +5,17 @@ body {
 	margin: 0 !important;
     padding: 0 !important;
 }
+a {
+	font-size: 34px;
+}
+a:link {
+  color: black;
+  text-decoration: none;
+}
+a:visited {
+  color: black;
+  text-decoration: none;
+}
 h1 {
  	color: Black;
 }
@@ -18,8 +29,9 @@ p {
 	min-height: 100%;
 }
 #d1 {
-	height: 90px;
+	height: 80px;
 	padding: 16px;
+	padding-top: 46px;
 	padding-left: 40px;
 	/*
 	border-bottom: 8px solid DarkSlateGrey;
