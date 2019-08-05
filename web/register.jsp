@@ -52,11 +52,6 @@
         }
         window.onload = initate;
     </script>
-    <style>
-        <%@ include file="/css/main.css" %>
-        <%@ include file="/css/default.css" %>
-    </style>
-
     <title>Registrieren</title>
 
 </head>
@@ -91,39 +86,4 @@
 </div>
 
 </body>
-<script>
-
-    function loadStyle()
-    {
-        var style = getCookie("pStyle");
-
-        switch(style)
-        {
-            case "main":
-                document.getElementById("pagestyle").setAttribute("href", "css/main.css");
-                break;
-            case "dark":
-                document.getElementById("pagestyle").setAttribute("href", "css/darkmode.css");
-                break;
-        }
-    }
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-
-    window.onload = loadStyle;
-</script>
 </html>

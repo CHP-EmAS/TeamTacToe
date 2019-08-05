@@ -1,56 +1,68 @@
 * {
-    font-family: 'Open Sans', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }
 body {
-    margin: 0 !important;
-    padding: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+a {
+	font-size: 34px;
+}
+a:link {
+	color: black;
+	text-decoration: none;
+}
+a:visited {
+	color: black;
+	text-decoration: none;
 }
 h1 {
-    color: Black;
+	color: Black;
 }
 h2 {
-    color: Black;
+	color: Black;
 }
 p {
-    color: Black;
+	color: Black;
 }
 #container {
-    min-height: 100%;
+	min-height: 100%;
 }
 #d1 {
-    height: 90px;
-    padding: 16px;
-    padding-left: 40px;
-    /*
-    border-bottom: 8px solid DarkSlateGrey;
-    background: DimGrey;
-    */
-    border-bottom: 3px solid Black;
-    background: #2980B9;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	height: 80px;
+	padding: 16px;
+	padding-top: 46px;
+	padding-left: 40px;
+	/*
+	border-bottom: 8px solid DarkSlateGrey;
+	background: DimGrey;
+	*/
+	border-bottom: 3px solid Black;
+	background: #2980B9;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 #d2 {
-    padding: 16px;
-    padding-bottom: 28px;
-    min-height: 100vh;
+	padding: 16px;
+	padding-bottom: 28px;
+	min-height: 100vh;
 }
 #d3 {
-    bottom: 0px;
-    right: 0px;
-    min-height: 90px;
-    padding: 16px;
-    text-align: center;
-    /*
-    border-top: 8px solid DimGrey;
-    background: DarkSlateGrey;
-    */
-    border-top: 3px solid Black;
-    background: #2980B9;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	bottom: 0px;
+	right: 0px;
+	min-height: 90px;
+	padding: 16px;
+	text-align: center;
+	/*
+	border-top: 8px solid DimGrey;
+	background: DarkSlateGrey;
+	*/
+	border-top: 3px solid Black;
+	background: #2980B9;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #FFFFFF, #6DD5FA, #2980B9); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 .Footer_button {
-    min-width: 70px;
-    min-height: 20px;
+	min-width: 70px;
+	min-height: 20px;
 }

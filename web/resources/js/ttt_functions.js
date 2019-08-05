@@ -68,18 +68,15 @@ function updateFieldData(fieldData){
     {
         if(fieldData[i] === 1)
         {
-        	document.getElementById('field' + i).style.background = "url('/resources/img/ttt_circle.png')";
-            //document.getElementById('field' + (i+1)).style.backgroundColor = 'red';
+            document.getElementById('field' + (i)).style.background = 'red';
         }
         else if(fieldData[i] === 2)
         {
-        	document.getElementById('field' + i).style.background = "url('/resources/img/ttt_cross.png')";
-            //document.getElementById('field' + (i+1)).style.backgroundColor = 'green';
+            document.getElementById('field' + (i)).style.background = 'green';
         }
         else
         {
-        	document.getElementById('field' + i).style.background = "none";
-            //document.getElementById('field' + (i+1)).style.backgroundColor = 'white';
+        	document.getElementById('field' + (i)).style.background = 'white';
         }
 
     }

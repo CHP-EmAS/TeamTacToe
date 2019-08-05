@@ -78,7 +78,7 @@
 			<br>
 			<button onClick="window.location='leaderboard.jsp'">Leaderboard</button>
 			<br>
-			<button>About</button>
+			<button onClick="window.location='Datenschutz.jsp'">Datenschutz</button>
 		</div>
 		<div id="d2_2">
 			<h2>What's Tic Tac Toe?</h2>
@@ -88,75 +88,9 @@
 				X and O, who take turns marking the spaces in a 3×3 grid.
 				The player who succeeds in placing three of their marks in a horizontal,
 				vertical, or diagonal row wins the game.</p>
-			<p>
-				Auf einem quadratischen, 3×3 Felder großen Spielfeld setzen die beiden Spieler abwechselnd ihr Zeichen (ein Spieler Kreuze, der andere Kreise) in ein freies Feld.
-				Der Spieler, der als Erster drei Zeichen in eine Zeile, Spalte oder Diagonale setzen kann, gewinnt. Wenn allerdings beide Spieler optimal spielen, kann keiner gewinnen,
-				und es kommt zu einem Unentschieden.
-				Das heißt, alle neun Felder sind gefüllt, ohne dass ein Spieler die erforderlichen Zeichen in einer Reihe, Spalte oder Diagonalen setzen konnte.
-			</p>
-			<p>"If you're going to perform inception, you need imagination."
-				<br>
-				- Christopher Nolan, Inception: The Shooting Script</p>
+
 		</div>
-	</div>
-	<div id="d3">
-		<h2>TeamTacToe</h2>
-		<button id="stylesheet1" onClick="setStyle('main')" class="Footer_button">Default</button>
-		<button id="stylesheet2" onClick="setStyle('dark')" class="Footer_button">Darkmode</button>
-		<button id="stylesheet3" onClick="setStyle('main')" class="Footer_button">Awesome</button>
 	</div>
 </div>
 </body>
-<script>
-	function setStyle(pStyle) {
-
-		switch(pStyle)
-		{
-			case "main":
-				document.cookie = "pStyle=main";
-				break;
-			case "dark":
-				document.cookie = "pStyle=dark";
-				break;
-			default:
-				document.cookie = "pStyle=main";
-				break;
-		}
-
-		loadStyle();
-	}
-
-	window.onload = loadStyle;
-
-	function loadStyle()
-	{
-		var style = getCookie("pStyle");
-
-		switch(style)
-		{
-			case "main":
-				document.getElementById("pagestyle").setAttribute("href", "/css/main.css");
-				break;
-			case "dark":
-				document.getElementById("pagestyle").setAttribute("href", "/css/darkmode.css");
-				break;
-		}
-	}
-
-	function getCookie(cname) {
-		var name = cname + "=";
-		var decodedCookie = decodeURIComponent(document.cookie);
-		var ca = decodedCookie.split(';');
-		for(var i = 0; i <ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) === ' ') {
-				c = c.substring(1);
-			}
-			if (c.indexOf(name) === 0) {
-				return c.substring(name.length, c.length);
-			}
-		}
-		return "";
-	}
-</script>
 </html>

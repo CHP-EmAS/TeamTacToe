@@ -8,7 +8,7 @@ function hashSubmit()
 function createGame(gametype)
 {
     var req = new XMLHttpRequest();
-    req.open('GET','/gameController?mode=createGame&gameType='+gametype, true);
+    req.open('GET','http://chp-games.de/gameController?mode=createGame&gameType='+gametype, true);
 
     req.onreadystatechange = function receive() {
         if(req.readyState === 4){

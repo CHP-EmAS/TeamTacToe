@@ -6,10 +6,11 @@
     <meta charset="ISO-8859-1">
     <title>Super Tic Tac Toe</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-    <link id="pagestyle" rel="stylesheet" type="text/css" href="css/main.css" title="norm">
+
     <style>
         <%@ include file="/css/main.css" %>
     </style>
+
     <style>
         #reset {
             padding: 16px;
@@ -42,7 +43,7 @@
 <body>
 <div id="container">
     <div id="d1">
-        <h1>Tic Tac Toe</h1>
+        <h1><a href="http://chp-games.de">Tic Tac Toe</a></h1>
     </div>
     <div id="d2">
     </div>
@@ -79,38 +80,5 @@
     table += "<h1 id='msgBox'></h1>";
     table += "<button id='reset' disabled onclick='restartGame()'>Nochmal!</button>";
     document.getElementById('d2').innerHTML = table;
-
-    function loadStyle()
-    {
-        var style = getCookie("pStyle");
-
-        switch(style)
-        {
-            case "main":
-                document.getElementById("pagestyle").setAttribute("href", "css/main.css");
-                break;
-            case "dark":
-                document.getElementById("pagestyle").setAttribute("href", "css/darkmode.css");
-                break;
-        }
-    }
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for(var i = 0; i <ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-
-    window.onload = loadStyle;
 </script>
 </html>
